@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='UTF-8'/>
+    <title>around</title>
+    <script src="assets/d3.v3.min.js" charset="utf-8"></script>
+
+    <!--
+    <script src="http://d3js.org/topojson.v1.min.js" charset="utf-8"></script>
+    <script src="https://use.fontawesome.com/e7df28fab5.js"></script>
+
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    -->
+
+    <script src="assets/font-awes-e7df28fab5.js"></script>
+
+  <script src="assets/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery.min.js"><\/script>')</script>
+
+    <script src="assets/tether.min.js"></script>
+
+    <link rel="stylesheet" href="assets/bootstrap.min.css" crossorigin="anonymous">
+    <script src="assets/bootstrap.min.js" crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="assets/leaflet.css" />
+
+    <style>
+    /* Sets the map to be full screen with no margin */
+      body, html, #fullMap {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        font-family: Consolas,"Liberation Mono",Menlo,monospace;
+        font-weight: 100;
+        font-size: 10px;
+        color: #444;
+        overflow: hidden;
+        height: 100%;
+        max-height: 100%;
+      }
+
+      #wrapper {
+        position: fixed;
+        top: 5px;
+        width: 100%;
+        z-index: 400;
+      }
+
+      #ui {
+        //position: fixed;
+        top: 5px;
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <div id="fullMap" class="">
+    </div>
+
+    <div id="wrapper" class="">
+      <div id="ui">
+        <input type="text" id="response">
+        <div>
+          <span id="count-correct"></span> /
+          <span id="count-all"></span>
+           (<span id="count-percent"></span>)
+        </div>
+        <div id="enter" class="btn">Enter</div>
+      </div>
+    </div>
+
+
+    <script src="assets/leaflet.js"></script>
+    <script src="assets/leaflet-hash.js" charset="utf-8"></script>
+
+    <script src="index.js" charset="utf-8"></script>
+
+  </body>
+</html>
+
