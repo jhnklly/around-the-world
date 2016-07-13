@@ -89,8 +89,8 @@ function init() {
 
   d3.select("#enter").on("click", function(){
     var result = false;
-    var response = document.querySelector('#response').value.toUpperCase();
-    var answer = A.currAttr.toUpperCase();
+    var response = document.querySelector('#response').value.toUpperCase().trim();
+    var answer = A.currAttr.toUpperCase().trim();
     //var result =
     A.gjLayer.eachLayer(function (layer) {
       if(layer.feature.properties.name === A.currAttr) {
