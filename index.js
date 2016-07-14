@@ -64,6 +64,9 @@ function init() {
   d3.json(A.dataUrl, function(data){
     console.log(data);
     A.data = data;
+    A.typeaheadData = A.data.features.map(function(v){
+      return v.properties.name;
+    });
     //processJSON(A.rules);
     A.gjLayer = L.geoJson(A.data, {
       style: A.polyStyle
@@ -83,6 +86,17 @@ function init() {
         A.map.fitBounds(layer.getBounds());
         layer.setStyle(A.focusStyle)
       }
+    });
+
+
+    $('#response').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+    },
+    {
+      name: 'typeaheadData',
+      source: substringMatcher(A.typeaheadData)
     });
 
   });
@@ -126,6 +140,29 @@ function init() {
   });
 
 }
+
+
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substringRegex;
+
+    // an array that will be populated with substring matches
+    matches = [];
+
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        matches.push(str);
+      }
+    });
+
+    cb(matches);
+  };
+};
 
 
 
