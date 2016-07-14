@@ -52,6 +52,7 @@
       position: fixed;
       top: 5px;
       width: 100%;
+      height: 100%;
       z-index: 400;
     }
 
@@ -62,6 +63,14 @@
       margin: 0 auto;
       text-align: center;
     }
+
+    #opts {
+      position: fixed;
+      z-index: 500;
+    }
+
+    .bottom { bottom: 5px; }
+    .left { left: 5px; }
   </style>
 
   </head>
@@ -71,12 +80,23 @@
     </div>
 
     <div id="wrapper" class="">
+    <div id="opts" class="bottom left">
+      <label><input type="checkbox" value="pop" checked="checked"> Population</label>
+      <br />
+      <label><input type="checkbox" value="area"> Area</label>
+      <br />
+      <label><input type="checkbox" value="random"> Random</label>
+    </div>
+
       <div id="ui">
         <input type="text" id="response" class="typeahead">
+        <div id="toast">
+
+        </div>
         <div>
           <span id="count-correct">0</span> /
           <span id="count-all">0</span>
-           (<span id="count-percent">0</span>)
+           (<span id="count-percent">0%</span>)
         </div>
         <div id="enter" class="btn">Enter</div>
       </div>

@@ -105,19 +105,23 @@ function init() {
     var result = false;
     var response = document.querySelector('#response').value.toUpperCase().trim();
     var answer = A.currAttr.toUpperCase().trim();
-    //var result =
+    var toast = "";
     A.gjLayer.eachLayer(function (layer) {
       if(layer.feature.properties.name === A.currAttr) {
         if ( response === answer ) {
-          layer.setStyle(A.correctStyle)
+          layer.setStyle(A.correctStyle);
           A.countCorrect++;
+          toast += A.currAttr + " is correct! ";
         } else {
-          layer.setStyle(A.incorrectStyle)
+          layer.setStyle(A.incorrectStyle);
+          toast += "The correct answer was " + A.currAttr;
+          toast += '<br>(You said "' + document.querySelector('#response').value + '.")';
         }
         A.countAll++;
       }
     });
 
+    document.querySelector('#toast').innerHTML = toast;
     document.querySelector('#count-correct').innerHTML = A.countCorrect;
     document.querySelector('#count-all').innerHTML = A.countAll;
     document.querySelector('#count-percent').innerHTML = parseInt(100 * (A.countCorrect / A.countAll)) + "%";
