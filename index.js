@@ -64,9 +64,14 @@ function init() {
   d3.json(A.dataUrl, function(data){
     console.log(data);
     A.data = data;
-    A.typeaheadData = A.data.features.map(function(v){
+    A.names = A.data.features.map(function(v){
       return v.properties.name;
+    }).filter(function(v){
+      return v && v.length > 0;
     });
+    A.namesPop = A.names;
+    A.namesAlpha = sortCopy(A.names);
+
     //processJSON(A.rules);
     A.gjLayer = L.geoJson(A.data, {
       style: A.polyStyle
@@ -75,7 +80,7 @@ function init() {
 
 
     var currFeature = A.data.features[A.currInt];
-    A.currInt++;
+    //A.currInt++;
     //var currFeature = A.data.features[getRandomInt(0,A.data.features.length)];
     A.currAttr = currFeature.properties.name;
 
@@ -96,13 +101,13 @@ function init() {
     },
     {
       name: 'typeaheadData',
-      source: substringMatcher(A.typeaheadData)
+      source: substringMatcher(A.namesAlpha)
     });
 
   });
 
   d3.select("#enter").on("click", function(){
-    var result = false;
+    //var result = false;
     var response = document.querySelector('#response').value.toUpperCase().trim();
     var answer = A.currAttr.toUpperCase().trim();
     var toast = "";
@@ -115,7 +120,7 @@ function init() {
         } else {
           layer.setStyle(A.incorrectStyle);
           toast += "The correct answer was " + A.currAttr;
-          toast += '<br>(You said "' + document.querySelector('#response').value + '.")';
+          toast += '<br>You said "' + document.querySelector('#response').value + '"';
         }
         A.countAll++;
       }
@@ -131,6 +136,7 @@ function init() {
     A.currInt++;
     //var currFeature = A.data.features[getRandomInt(0,A.data.features.length)];
     A.currAttr = currFeature.properties.name;
+    A.currAttr = A.namesPop[A.currInt];
 
     console.log(currFeature.properties.name);
     A.gjLayer.eachLayer(function (layer) {
@@ -196,4 +202,8 @@ A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function sortCopy(arr) {
+  return arr.slice(0).sort();
 }

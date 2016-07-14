@@ -14,7 +14,6 @@ ogr2ogr ne_50_over300sqkm.shp ne_50_explode.shp -where 'sqkm_part >= 300 and nam
 
 ogr2ogr ne_50_over300sqkm_union.shp ne_50_over300sqkm.shp -dialect sqlite -sql "select st_union(geometry) as geometry, sovereignt, name, pop_mill, area_sqkm, gdp_md_est, wikipedia, woe_id, tiny, homepart, iso_a2, iso_a3, continent, subregion from ne_50_over300sqkm GROUP BY sovereignt, name, pop_mill, area_sqkm, gdp_md_est, wikipedia, woe_id, tiny, homepart, iso_a2, iso_a3, continent, subregion"
 
-ogr2ogr -f geojson ne50_aroundworld.geojson ne_50_over300sqkm_union.shp -lco coordinate_precision=5
 
 ogr2ogr -f geojson ne50_aroundworld.geojson ne_50_over300sqkm_union.shp -lco coordinate_precision=5 -sql "select * from ne_50_over300sqkm_union order by pop_mill desc"
 
