@@ -155,6 +155,7 @@ function resetData(fileUrl) {
       }
     });
 
+    document.querySelector('#current-number').innerHTML = A.countAll + 1;
     document.querySelector('#toast').innerHTML = toast;
     document.querySelector('#count-correct').innerHTML = A.countCorrect;
     document.querySelector('#count-all').innerHTML = A.countAll;
@@ -164,14 +165,19 @@ function resetData(fileUrl) {
     var currFeature = A.data.features[A.currInt];
     A.currInt++;
     //var currFeature = A.data.features[getRandomInt(0,A.data.features.length)];
-    A.currAttr = currFeature.properties.name;
-    A.currAttr = A.namesPop[A.currInt];
+    //A.currAttr = currFeature.properties.name;
+    if (1==1) {
+      A.currAttr = A.namesPop[A.currInt];
+    } else {
+
+    }
 
     console.log(currFeature.properties.name);
     A.gjLayer.eachLayer(function (layer) {
       //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
         A.map.fitBounds(layer.getBounds());
+        A.map.setZoom(A.map.getZoom() - 1);
         layer.setStyle(A.focusStyle)
       }
     });

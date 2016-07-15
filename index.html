@@ -52,7 +52,7 @@
       position: fixed;
       top: 5px;
       width: 100%;
-      height: 100%;
+      //height: 100%;
       z-index: 400;
     }
 
@@ -79,6 +79,11 @@
       margin: 0;
     }
 
+    .tt-menu {
+      background: white;
+      padding: 5px;
+    }
+
   </style>
 
   </head>
@@ -88,26 +93,10 @@
     </div>
 
     <div id="wrapper" class="">
-    <div id="opts" class="bottom left">
-      <label><input type="radio" value="pop" checked="checked"> Population</label>
-      <br />
-      <label><input type="radio" value="area"> Area</label>
-      <br />
-      <label><input type="radio" value="random"> Random</label>
-      <br />
 
-      <select id="data-select">
-        <optgroup>
-          <option value="ne50_aroundworld.geojson">countries</option>
-          <option value="ca_counties.geojson">CA counties </option>
-          <option value="wilderness_norcal.geojson">wilderness</option>
-        </optgroup>
-      </select>
-      <br />
-
-    </div>
 
       <div id="ui">
+        <span id="current-number">1. </span>
         <input type="text" id="response" class="typeahead">
         <div id="toast">
 
@@ -119,6 +108,26 @@
         </div>
         <div id="enter" class="btn">Enter</div>
       </div>
+
+    </div>
+
+    <div id="opts" class="bottom left">
+      <label><input type="radio" value="pop" checked="checked"> Population</label>
+      <br />
+      <label><input type="radio" value="area"> Area</label>
+      <br />
+      <label><input type="radio" value="random"> Random</label>
+      <br />
+
+      <select id="data-select">
+        <optgroup>
+          <option value="ne50_aroundworld.geojson">countries</option>
+          <option value="ca_counties_simp2.geojson">CA counties </option>
+          <option value="wilderness_norcal.geojson">wilderness</option>
+        </optgroup>
+      </select>
+      <br />
+
     </div>
 
 

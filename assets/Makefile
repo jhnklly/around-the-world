@@ -121,5 +121,10 @@ ogr2ogr wilderness_calif.geojson -f geojson doc.kml
 
 topojson  -p -o wilderness_calif.topojson -s 0.005 wilderness_calif.geojson
 
+ogr2ogr -f geojson ca_counties.geojson tl_2015_us_county.shp -where "STATEFP = '06'" -t_srs epsg:4326 -lco coordinate_precision=5
+
+
+ogr2ogr -f geojson ca_counties_simp2.geojson ca_counties_simp.geojson -sql "select geometry, NAME as name, COUNTYFP as countyfp, ALAND as aland FROM OGRGeoJSON"
+
 
 
