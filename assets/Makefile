@@ -17,6 +17,10 @@ ogr2ogr ne_50_over300sqkm_union.shp ne_50_over300sqkm.shp -dialect sqlite -sql "
 
 ogr2ogr -f geojson ne50_aroundworld.geojson ne_50_over300sqkm_union.shp -lco coordinate_precision=5 -sql "select * from ne_50_over300sqkm_union order by pop_mill desc"
 
+rm wilderness_calif2.geojson
+ogr2ogr -f geojson wilderness_calif2.geojson  -dialect sqlite -sql "select st_union(geometry) as geometry, Name as name, Description as description from OGRGeoJSON group by name, description order by name" wilderness_calif_mapshaper.geojson -lco coordinate_precision=5
+
+ogr2ogr -f geojson wilderness_ca_subset.geojson wilderness_calif2.geojson -where "name ilike 'yosemite%'"
 
 
 ogrinfo -sql "alter table ne_50_explode add column sqkm_part integer" ne_50_explode.shp
@@ -111,3 +115,11 @@ tiny: Integer (0.0)
 homepart: Integer (0.0)
 area_jk: String (0.0)
 area_hec: String (0.0)
+
+curl -O http://www.wilderness.net/GIS/California_Wildernesses.kmz
+ogr2ogr wilderness_calif.geojson -f geojson doc.kml
+
+topojson  -p -o wilderness_calif.topojson -s 0.005 wilderness_calif.geojson
+
+
+

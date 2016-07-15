@@ -61,7 +61,36 @@ function init() {
   A.map.zoomControl.setPosition('bottomright');
   //A.map.attributionControl.setPrefix('');
   //A.map.attributionControl = false;
-  d3.json(A.dataUrl, function(data){
+
+  resetData(A.dataUrl);
+
+  d3.select('#data-select')
+    .on('change', function(v){
+      var fileUrl = "assets/" + d3.select(this).property('value');
+      resetData(fileUrl);
+
+      if ( d3.select(this).property('value') === "wilderness_norcal.geojson" ) {
+        var basemapIdx = 3;
+        A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
+            maxZoom: 20,
+            attribution: A.basemaps[basemapIdx].attribution
+        });
+        A.baselayer.addTo( A.map );
+      } else {
+        var basemapIdx = 2;
+        A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
+            maxZoom: 20,
+            attribution: A.basemaps[basemapIdx].attribution
+        });
+        A.baselayer.addTo( A.map );
+      }
+
+    })
+  ;
+}
+
+function resetData(fileUrl) {
+  d3.json(fileUrl, function(data){
     console.log(data);
     A.data = data;
     A.names = A.data.features.map(function(v){
@@ -190,6 +219,11 @@ A.basemaps = [
   {
     "url": "http://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}.png",
     "attribution": 'Map tiles by <a target="_blank" href="http://www.esri.com">esri</a>.',
+    "maxZoom": 18
+  },
+  {
+    "url": "https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiamhua2xseSIsImEiOiIxLUVDMzVNIn0.MguPdmGTQUvosyLINY3wGQ",
+    "attribution": 'Map tiles by <a target="_blank" href="http://www.mapbox.com">Mapbox</a>.',
     "maxZoom": 18
   }
 ];

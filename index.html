@@ -67,10 +67,18 @@
     #opts {
       position: fixed;
       z-index: 500;
+      line-height: 1;
+      vertical-align: middle;
     }
 
     .bottom { bottom: 5px; }
     .left { left: 5px; }
+
+    label, input {
+      vertical-align: middle;
+      margin: 0;
+    }
+
   </style>
 
   </head>
@@ -86,6 +94,17 @@
       <label><input type="radio" value="area"> Area</label>
       <br />
       <label><input type="radio" value="random"> Random</label>
+      <br />
+
+      <select id="data-select">
+        <optgroup>
+          <option value="ne50_aroundworld.geojson">countries</option>
+          <option value="ca_counties.geojson">CA counties </option>
+          <option value="wilderness_norcal.geojson">wilderness</option>
+        </optgroup>
+      </select>
+      <br />
+
     </div>
 
       <div id="ui">
