@@ -11,12 +11,13 @@ var LAT = 37.7677,
 
 var defaultFillOpacity = 0.5;
 var doneColor = "#999";
+var strokeWeight = 1;
 
 A.dataUrl = "assets/ne50_aroundworld.geojson";
 A.polyStyle = {
     "color": "#000",
     "fillColor": "#fff",
-    "weight": 2,
+    "weight": strokeWeight,
     "opacity": 0.2,
     "fillOpacity": defaultFillOpacity
 };
@@ -30,14 +31,14 @@ A.focusStyle = {
 A.correctStyle = {
     "color": doneColor,
     "fillColor": "#080",
-    "weight": 2,
+    "weight": strokeWeight,
     "opacity": 0.8,
     "fillOpacity": defaultFillOpacity
 };
 A.incorrectStyle = {
     "color": doneColor,
     "fillColor": "#f00",
-    "weight": 2,
+    "weight": strokeWeight,
     "opacity": 0.8,
     "fillOpacity": defaultFillOpacity
 };
@@ -68,6 +69,8 @@ function init() {
     .on('change', function(v){
       var fileUrl = "assets/" + d3.select(this).property('value');
       resetData(fileUrl);
+
+      console.log(d3.select(this).property('value'));
 
       if ( d3.select(this).property('value') === "wilderness_norcal.geojson" ) {
         var basemapIdx = 3;
@@ -102,6 +105,9 @@ function resetData(fileUrl) {
     A.namesAlpha = sortCopy(A.names);
 
     //processJSON(A.rules);
+    if (A.gjLayer) {
+      A.map.removeLayer(A.gjLayer);
+    }
     A.gjLayer = L.geoJson(A.data, {
       style: A.polyStyle
     });
@@ -113,7 +119,7 @@ function resetData(fileUrl) {
     //var currFeature = A.data.features[getRandomInt(0,A.data.features.length)];
     A.currAttr = currFeature.properties.name;
 
-    console.log(currFeature.properties.name);
+    //console.log(currFeature.properties.name);
     A.gjLayer.eachLayer(function (layer) {
       //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
@@ -177,7 +183,7 @@ function resetData(fileUrl) {
       //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
         A.map.fitBounds(layer.getBounds());
-        A.map.setZoom(A.map.getZoom() - 1);
+        //A.map.setZoom(A.map.getZoom() - 1);
         layer.setStyle(A.focusStyle)
       }
     });
@@ -209,7 +215,22 @@ var substringMatcher = function(strs) {
   };
 };
 
-
+$('input.typeahead').keypress(function (e) {
+    if (e.which == 13) {
+        /*var selectedValue = $('input.typeahead').data().ttView.dropdownView.getFirstSuggestion().datum.id;
+        $("#value_id").val(selectedValue);
+        */
+        console.log('enter');
+        //$('form').submit();
+        $('#enter').click();
+        //$('input.typeahead').val("");
+        //$('input.typeahead').typeahead('val', '');
+        $('.typeahead').typeahead('close');
+        $('input.typeahead').val("");
+        //$('input.typeahead').typeahead('setQuery', '');
+        return true;
+    }
+});
 
 A.basemaps = [
   {
