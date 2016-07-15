@@ -151,7 +151,7 @@ function resetData(fileUrl) {
         if ( response === answer ) {
           layer.setStyle(A.correctStyle);
           A.countCorrect++;
-          toast += A.currAttr + " is correct! ";
+          toast += A.currAttr + " was correct! ";
         } else {
           layer.setStyle(A.incorrectStyle);
           toast += "The correct answer was " + A.currAttr;
