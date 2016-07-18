@@ -129,15 +129,19 @@ function resetData(fileUrl) {
     });
 
 
-    $('#response').typeahead({
+    $('#response').typeahead('destroy');
+
+    A.typeahead = $('#response').typeahead({
       hint: true,
       highlight: true,
       minLength: 1
     },
     {
-      name: 'typeaheadData',
+      name: 'typeahead',
       source: substringMatcher(A.namesAlpha)
     });
+
+    //A.typeahead.data('typeahead').source = A.namesAlpha;
 
   });
 
