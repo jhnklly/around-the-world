@@ -13,7 +13,9 @@ var defaultFillOpacity = 0.5;
 var doneColor = "#999";
 var strokeWeight = 1;
 
-A.dataUrl = "assets/ne50_aroundworld.geojson";
+//A.dataUrl = "assets/ne50_aroundworld.geojson";
+A.dataUrl = "assets/ca_counties_simp2.geojson";
+
 A.polyStyle = {
     "color": "#000",
     "fillColor": "#fff",
@@ -46,6 +48,9 @@ A.currInt = 0;
 A.currAttr = "test";
 A.countCorrect = 0;
 A.countAll = 0;
+
+A.skip = ['San Francisco','Alameda','Contra Costa','Santa Clara','San Mateo','Santa Cruz','Marin','Sonoma','Napa','Solano','Mendocino','Monterey','Del Norte', 'Humboldt', 'San Luis Obispo', 'Santa Barbara', 'Ventura', 'Los Angeles','Orange','San Diego','San Bernardino','Riverside','San Joaquin','Lake'];
+A.level = "DIFFICULT";
 
 document.addEventListener("DOMContentLoaded", function(event) {
   init();
@@ -96,6 +101,16 @@ function resetData(fileUrl) {
   d3.json(fileUrl, function(data){
     console.log(data);
     A.data = data;
+    if ( A.level == "DIFFICULT") {
+      A.data.features = A.data.features.filter(function(el){
+        return A.skip.indexOf(el.properties.name) < 0;
+      });
+    }
+
+    if ( $('input[name=opts]:checked').val() == 'random' ) {
+      A.data.features = shuffle(A.data.features);
+    }
+
     A.names = A.data.features.map(function(v){
       return v.properties.name;
     }).filter(function(v){
@@ -271,4 +286,23 @@ function getRandomInt(min, max) {
 
 function sortCopy(arr) {
   return arr.slice(0).sort();
+}
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
 }
