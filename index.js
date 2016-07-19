@@ -12,8 +12,12 @@ var LAT = 37.7677,
 var defaultFillOpacity = 0.5;
 var doneColor = "#999";
 var strokeWeight = 1;
+var correctColor = "#008000";
+var wrongColor = "#7F00FF";
+/*
 var correctColor = "#0086FF";
 var wrongColor = "#E4971A";
+*/
 var boundsOpts = {paddingTopLeft: [40,40], paddingBottomRight: [40,300], maxZoom: 7 };
 //A.dataUrl = "assets/ne50_aroundworld.geojson";
 A.dataUrl = "assets/ca_counties_simp2.geojson";
@@ -99,6 +103,11 @@ function init() {
   ;
 }
 
+d3.select('input[name=opts]:checked')
+  .on('change', function(v) {
+  A.data.features = shuffle(A.data.features);
+});
+
 function resetData(fileUrl) {
   d3.json(fileUrl, function(data){
     console.log(data);
@@ -109,15 +118,18 @@ function resetData(fileUrl) {
       });
     }
 
+    A.data.features = A.data.features.filter(function(el){
+      return el.properties.name && el.properties.name.length > 0;
+    });
+
+    A.names = A.data.features.map(function(v){
+      return v.properties.name;
+    });
+
     if ( $('input[name=opts]:checked').val() == 'random' ) {
       A.data.features = shuffle(A.data.features);
     }
 
-    A.names = A.data.features.map(function(v){
-      return v.properties.name;
-    }).filter(function(v){
-      return v && v.length > 0;
-    });
     A.namesPop = A.names;
     A.namesAlpha = sortCopy(A.names);
 
