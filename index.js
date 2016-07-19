@@ -19,8 +19,8 @@ var correctColor = "#0086FF";
 var wrongColor = "#E4971A";
 */
 var boundsOpts = {paddingTopLeft: [40,40], paddingBottomRight: [40,300], maxZoom: 7 };
-//A.dataUrl = "assets/ne50_aroundworld.geojson";
-A.dataUrl = "assets/ca_counties_simp2.geojson";
+A.dataUrl = "assets/ne50_aroundworld.geojson";
+//A.dataUrl = "assets/ca_counties_simp2.geojson";
 
 A.polyStyle = {
     "color": "#000",
@@ -73,6 +73,7 @@ function init() {
   A.map.zoomControl.setPosition('bottomright');
   //A.map.attributionControl.setPrefix('');
   //A.map.attributionControl = false;
+
 
   resetData(A.dataUrl);
 
@@ -174,6 +175,7 @@ function resetData(fileUrl) {
     });
 
     //A.typeahead.data('typeahead').source = A.namesAlpha;
+    $('#response').focus();
 
   });
 
