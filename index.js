@@ -12,7 +12,7 @@ var LAT = 37.7677,
 var defaultFillOpacity = 0.5;
 var doneColor = "#999";
 var strokeWeight = 1;
-var correctColor = "#008000";
+var correctColor = "#01A59F";
 var wrongColor = "#7F00FF";
 /*
 var correctColor = "#0086FF";
@@ -98,6 +98,9 @@ function init() {
         });
         A.baselayer.addTo( A.map );
       }
+
+      // Move cursor to input
+      $('#response').focus();
 
     })
   ;
