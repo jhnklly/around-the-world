@@ -12,6 +12,8 @@ var LAT = 37.7677,
 var defaultFillOpacity = 0.5;
 var doneColor = "#999";
 var strokeWeight = 1;
+var correctColor = "#0086FF";
+var wrongColor = "#E4971A";
 
 //A.dataUrl = "assets/ne50_aroundworld.geojson";
 A.dataUrl = "assets/ca_counties_simp2.geojson";
@@ -32,14 +34,14 @@ A.focusStyle = {
 };
 A.correctStyle = {
     "color": doneColor,
-    "fillColor": "#080",
+    "fillColor": correctColor,
     "weight": strokeWeight,
     "opacity": 0.8,
     "fillOpacity": defaultFillOpacity
 };
 A.incorrectStyle = {
     "color": doneColor,
-    "fillColor": "#f00",
+    "fillColor": wrongColor,
     "weight": strokeWeight,
     "opacity": 0.8,
     "fillOpacity": defaultFillOpacity
@@ -138,7 +140,7 @@ function resetData(fileUrl) {
     A.gjLayer.eachLayer(function (layer) {
       //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
-        A.map.fitBounds(layer.getBounds());
+        A.map.fitBounds(layer.getBounds(), {padding: [150,150]});
         layer.setStyle(A.focusStyle)
       }
     });
@@ -201,7 +203,7 @@ function resetData(fileUrl) {
     A.gjLayer.eachLayer(function (layer) {
       //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
-        A.map.fitBounds(layer.getBounds());
+        A.map.fitBounds(layer.getBounds(), { padding: [150, 150] } );
         //A.map.setZoom(A.map.getZoom() - 1);
         layer.setStyle(A.focusStyle)
       }
