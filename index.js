@@ -14,7 +14,7 @@ var doneColor = "#999";
 var strokeWeight = 1;
 var correctColor = "#0086FF";
 var wrongColor = "#E4971A";
-var boundsOpts = {paddingTopLeft: [40,40], paddingBottomRight: [40,300] };
+var boundsOpts = {paddingTopLeft: [40,40], paddingBottomRight: [40,300], maxZoom: 7 };
 //A.dataUrl = "assets/ne50_aroundworld.geojson";
 A.dataUrl = "assets/ca_counties_simp2.geojson";
 
