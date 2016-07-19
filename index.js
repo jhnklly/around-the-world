@@ -18,7 +18,13 @@ var wrongColor = "#7F00FF";
 var correctColor = "#0086FF";
 var wrongColor = "#E4971A";
 */
-var boundsOpts = {paddingTopLeft: [40,40], paddingBottomRight: [40,300], maxZoom: 7 };
+var boundsOpts = {
+  paddingTopLeft: [40,40],
+  //paddingBottomRight: [40,300],
+  paddingBottomRight: [40,100],
+  maxZoom: 20
+};
+
 A.dataUrl = "assets/ne50_aroundworld.geojson";
 //A.dataUrl = "assets/ca_counties_simp2.geojson";
 
@@ -137,7 +143,6 @@ function resetData(fileUrl) {
     A.namesPop = A.names;
     A.namesAlpha = sortCopy(A.names);
 
-    //processJSON(A.rules);
     if (A.gjLayer) {
       A.map.removeLayer(A.gjLayer);
     }
@@ -152,11 +157,14 @@ function resetData(fileUrl) {
     //var currFeature = A.data.features[getRandomInt(0,A.data.features.length)];
     A.currAttr = currFeature.properties.name;
 
-    //console.log(currFeature.properties.name);
+    console.log(currFeature.properties.name);
     A.gjLayer.eachLayer(function (layer) {
-      //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
+        console.log(layer.feature.properties.name );
+        console.log(layer.getBounds());
+        //debugger;
         A.map.fitBounds(layer.getBounds(), boundsOpts);
+        //A.map.fitBounds(layer.getBounds());
         layer.setStyle(A.focusStyle)
       }
     });
