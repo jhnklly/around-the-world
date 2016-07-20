@@ -25,8 +25,40 @@ var boundsOpts = {
   maxZoom: 20
 };
 
+
+A.basemaps = [
+  {
+    "url": "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+    "attribution": '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>',
+    "maxZoom": 19
+  },
+  {
+    "url": "http://{s}.tile.openstreetmap.us/usgs_large_scale/{z}/{x}/{y}.png",
+    "attribution": 'USGS Large Scale Imagery',
+    "maxZoom": 20
+  },
+  {
+    "url": "http://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}.png",
+    "attribution": 'Map tiles by <a target="_blank" href="http://www.esri.com">esri</a>.',
+    "maxZoom": 18
+  },
+  {
+    "url": "https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiamhua2xseSIsImEiOiIxLUVDMzVNIn0.MguPdmGTQUvosyLINY3wGQ",
+    "attribution": 'Map tiles by <a target="_blank" href="http://www.mapbox.com">Mapbox</a>.',
+    "maxZoom": 18
+  }
+];
+var basemapIdx = 2;
+
+
 A.dataUrl = "assets/ne50_aroundworld.geojson";
 //A.dataUrl = "assets/ca_counties_simp2.geojson";
+A.datasets = {
+  "world": { file: "ne50_aroundworld.geojson", baseIdx: 2 },
+  "calif": { file: "ca_counties_simp2.geojson", baseIdx: 2 },
+  "sf": { file: "sf_planning_neighborhoods.geojson", baseIdx: 3 },
+  "wild": { file: "wilderness_norcal.geojson", baseIdx: 3 },
+};
 
 A.polyStyle = {
     "color": "#000",
@@ -85,11 +117,22 @@ function init() {
 
   d3.select('#data-select')
     .on('change', function(v){
-      var fileUrl = "assets/" + d3.select(this).property('value');
+      var optValue = d3.select(this).property('value');
+      A.datasets[optValue].file;
+
+      //var fileUrl = "assets/" + d3.select(this).property('value');
+      var fileUrl = "assets/" + A.datasets[optValue].file;
       resetData(fileUrl);
 
       console.log(d3.select(this).property('value'));
+      basemapIdx = A.datasets[optValue].baseIdx;
 
+      A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
+          maxZoom: 20,
+          attribution: A.basemaps[basemapIdx].attribution
+      });
+      A.baselayer.addTo( A.map );
+      /*
       if ( d3.select(this).property('value') === "wilderness_norcal.geojson" ) {
         var basemapIdx = 3;
         A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
@@ -104,7 +147,7 @@ function init() {
             attribution: A.basemaps[basemapIdx].attribution
         });
         A.baselayer.addTo( A.map );
-      }
+      }*/
 
       // Move cursor to input
       $('#response').focus();
@@ -119,6 +162,7 @@ d3.select('input[name=opts]:checked')
 });
 
 function resetData(fileUrl) {
+
   d3.json(fileUrl, function(data){
     console.log(data);
     A.data = data;
@@ -278,30 +322,6 @@ $('input.typeahead').keypress(function (e) {
     }
 });
 
-A.basemaps = [
-  {
-    "url": "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-    "attribution": '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>',
-    "maxZoom": 19
-  },
-  {
-    "url": "http://{s}.tile.openstreetmap.us/usgs_large_scale/{z}/{x}/{y}.png",
-    "attribution": 'USGS Large Scale Imagery',
-    "maxZoom": 20
-  },
-  {
-    "url": "http://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}.png",
-    "attribution": 'Map tiles by <a target="_blank" href="http://www.esri.com">esri</a>.',
-    "maxZoom": 18
-  },
-  {
-    "url": "https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiamhua2xseSIsImEiOiIxLUVDMzVNIn0.MguPdmGTQUvosyLINY3wGQ",
-    "attribution": 'Map tiles by <a target="_blank" href="http://www.mapbox.com">Mapbox</a>.',
-    "maxZoom": 18
-  }
-];
-
-var basemapIdx = 2;
 A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
     maxZoom: 20,
     attribution: A.basemaps[basemapIdx].attribution
