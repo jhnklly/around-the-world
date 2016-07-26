@@ -317,6 +317,7 @@ $('input.typeahead').keypress(function (e) {
         $("#value_id").val(selectedValue);
         */
 
+
         var selectedValue = $('input.tt-hint').val() || $('input.tt-input').val()
 
         var selection = $('input.typeahead').parent().find('.tt-selectable:first')[0];
