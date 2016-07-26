@@ -20,9 +20,9 @@ var correctColor = "#0086FF";
 var wrongColor = "#E4971A";
 */
 var boundsOpts = {
-  paddingTopLeft: [40,40],
+  paddingTopLeft: [10,10],
   //paddingBottomRight: [40,300],
-  paddingBottomRight: [40,100],
+  paddingBottomRight: [10,200],
   maxZoom: 20
 };
 
@@ -276,9 +276,6 @@ function resetData(fileUrl) {
       if(layer.feature.properties.name === A.currAttr) {
         setTimeout(function(){
           A.map.fitBounds(layer.getBounds(), boundsOpts );
-          /*setTimeout(function(){
-            A.map.setZoom(A.map.getZoom() - 1);
-          }, 500);*/
         }, 1000);
         layer.setStyle(A.focusStyle);
       }
