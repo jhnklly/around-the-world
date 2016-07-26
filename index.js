@@ -9,7 +9,8 @@ var LAT = 37.7677,
   LON = -122.456,
   ZED = 8;
 
-var defaultFillOpacity = 0.5;
+//var defaultFillOpacity = 0.5;
+var defaultFillOpacity = 1;
 var doneColor = "#999";
 var strokeWeight = 1;
 var correctColor = "#01A59F";
@@ -48,13 +49,13 @@ A.basemaps = [
     "maxZoom": 18
   }
 ];
-var basemapIdx = 2;
+var basemapIdx = 0;
 
 
 A.dataUrl = "assets/ne50_aroundworld.geojson";
 //A.dataUrl = "assets/ca_counties_simp2.geojson";
 A.datasets = {
-  "world": { file: "ne50_aroundworld.geojson", baseIdx: 2 },
+  "world": { file: "ne50_aroundworld.geojson", baseIdx: 0 },
   "calif": { file: "ca_counties_simp2.geojson", baseIdx: 2 },
   "sf": { file: "sf_planning_neighborhoods.geojson", baseIdx: 3 },
   "wild": { file: "wilderness_norcal.geojson", baseIdx: 3 },
@@ -72,21 +73,21 @@ A.focusStyle = {
     "fillColor": "#fff",
     "weight": 5,
     "opacity": 0.8,
-    "fillOpacity": 0
+    "fillOpacity": 1
 };
 A.correctStyle = {
     "color": doneColor,
     "fillColor": correctColor,
     "weight": strokeWeight,
     "opacity": 0.8,
-    "fillOpacity": defaultFillOpacity
+    "fillOpacity": 0.5 * defaultFillOpacity
 };
 A.incorrectStyle = {
     "color": doneColor,
     "fillColor": wrongColor,
     "weight": strokeWeight,
     "opacity": 0.8,
-    "fillOpacity": defaultFillOpacity
+    "fillOpacity": 0.5 * defaultFillOpacity
 };
 A.currInt = 0;
 A.currAttr = "test";
@@ -203,6 +204,7 @@ function resetData(fileUrl) {
 
     console.log(currFeature.properties.name);
     A.gjLayer.eachLayer(function (layer) {
+      setPopups(layer);
       if(layer.feature.properties.name === A.currAttr) {
         console.log(layer.feature.properties.name );
         console.log(layer.getBounds());
@@ -272,9 +274,13 @@ function resetData(fileUrl) {
     A.gjLayer.eachLayer(function (layer) {
       //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
-        A.map.fitBounds(layer.getBounds(), boundsOpts );
-        //A.map.setZoom(A.map.getZoom() - 1);
-        layer.setStyle(A.focusStyle)
+        setTimeout(function(){
+          A.map.fitBounds(layer.getBounds(), boundsOpts );
+          /*setTimeout(function(){
+            A.map.setZoom(A.map.getZoom() - 1);
+          }, 500);*/
+        }, 1000);
+        layer.setStyle(A.focusStyle);
       }
     });
 
@@ -310,17 +316,31 @@ $('input.typeahead').keypress(function (e) {
         /*var selectedValue = $('input.typeahead').data().ttView.dropdownView.getFirstSuggestion().datum.id;
         $("#value_id").val(selectedValue);
         */
-        console.log('enter');
-        //$('form').submit();
+
+        var selectedValue = $('input.tt-hint').val() || $('input.tt-input').val()
+
+        var selection = $('input.typeahead').parent().find('.tt-selectable:first')[0];
+
+        if (selection) {
+          selectedValue = selection.innerText;
+        }
+
+        $('input.typeahead').val(selectedValue);
+
         $('#enter').click();
-        //$('input.typeahead').val("");
-        //$('input.typeahead').typeahead('val', '');
         $('.typeahead').typeahead('close');
         $('input.typeahead').val("");
-        //$('input.typeahead').typeahead('setQuery', '');
         return true;
     }
 });
+
+
+/*$('input.typeahead').bind('typeahead:render', function(e) {
+    console.log('rendering');
+    console.log( $('input.typeahead').parent().find('.tt-selectable:first')[0].innerText );
+    $('input.typeahead').parent().find('.tt-selectable:first')
+    //.addClass('tt-cursor');
+});*/
 
 A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
     maxZoom: 20,
@@ -353,3 +373,6 @@ function shuffle(array) {
 
   return array;
 }
+
+
+

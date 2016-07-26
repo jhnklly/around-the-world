@@ -32,6 +32,7 @@
 
 
   <link rel="stylesheet" href="assets/leaflet.css" />
+  <link rel="stylesheet" href="assets/spectrum.css" />
 
   <style>
   /* Sets the map to be full screen with no margin */
@@ -83,6 +84,155 @@
       background: white;
       padding: 5px;
     }
+
+
+/* spectrum / colorpicker */
+a.button-b {
+    background-color: transparent;
+    text-align:center;
+    /*color:rgba(0,127,255,0.5);*/
+    color:rgba(20,20,30,0.5);
+    display:inline-block;
+    height:21px;
+    margin:0px;
+    padding:0px 5px;
+    position:relative;
+    /*border: 2px solid rgba(0,127,255,0.5);*/
+    border: 2px solid rgba(20,20,30,0.5);
+    cursor:pointer;
+    border-radius:3px;
+    text-decoration: none;
+    opacity: 1;
+    /*box-sizing: border-box;*/
+    line-height:20px;
+    font-size:12px;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+a.button-b:hover {
+    /*border-color*/
+    opacity: 1;
+    /*color: rgba(0,127,255,1);
+    border-color: rgba(0,127,255,1);*/
+    color: rgba(20,20,30,1);
+    border-color: rgba(20,20,30,1);
+}
+
+
+a.button-c {
+    /*background-color: purple;*/
+    text-align:center;
+    display:inline-block;
+    height:11px;
+    width:11px;
+    margin:0px;
+    padding:5px;
+    position:relative;
+    border: 2px solid rgba(200,200,200,0.5);
+    /*border-width: 2px;*/
+    cursor:pointer;
+    border-radius:50%;
+    text-decoration: none;
+    opacity: 1;
+    /*box-sizing: border-box;*/
+        line-height:21px;
+    font-size:12px;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+
+.middle-aligner {
+    display: inline-block;
+    vertical-align: middle;
+
+}
+.leaflet-popup-content {
+    text-align: center;
+}
+
+.sidepanel {
+    background-color: #fefefd;  /*or #def? ;  overrides lightheme*/
+}
+
+a.no-decoration,
+a.no-decoration:visited,
+a.no-decoration:hover {
+    text-decoration: none!important;
+    color: #000!important;
+}
+
+.sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
+    font: inherit;
+}
+
+.sp-container {
+    border: 1px solid #ddd !important;
+}
+
+a.sp-choose,
+a.sp-cancel {
+    background-color: transparent;
+    text-align: center;
+    /* color: rgba(0,127,255,0.5); */
+    color: rgba(20,20,30,0.8);
+    display: inline-block;
+    height: 21px;
+    margin: 0px;
+    margin-left: 4px;
+    padding: 0px 5px !important;
+    position: relative;
+    /* border: 2px solid rgba(0,127,255,0.5); */
+    border: 1px solid rgba(20,20,30,0.5);
+    cursor: pointer;
+    border-radius: 0px;
+    text-decoration: none !important;
+    opacity: 1;
+    /* box-sizing: border-box; */
+    line-height: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    vertical-align: middle;
+    font: inherit !important;
+}
+
+a.sp-choose:hover,
+a.sp-cancel:hover {
+    /*border-color*/
+    opacity: 1;
+    /*color: rgba(0,127,255,1);
+    border-color: rgba(0,127,255,1);*/
+    color: rgba(20,20,30,1);
+    border-color: rgba(20,20,30,1);
+}
+
+a.sp-cancel {
+    float: left;
+    margin-left: 0px;
+}
+
+a.sp-choose {
+    float: right;
+}
+
+.sp-input {
+    width: 100%;
+}
+.sp-input {
+    font-size: 0.8em !important;
+    font-family: monospace !important;
+    border: 1px solid rgba(20,20,30,0.5);
+    padding: 0px 5px !important;
+    margin: 0;
+    width: 60px;
+    background: transparent;
+    border-radius: 0px;
+    color: rgba(20,20,30,0.8);
+    height: 23px;
+    float: right;
+}
+
 
   </style>
 
@@ -137,6 +287,8 @@
     <!--
     <script src="assets/Leaflet.Sleep.js" charset="utf-8"></script>
     -->
+    <script src="assets/spectrum.js" charset="utf-8"></script>
+    <script src="assets/spectrum_helper.js" charset="utf-8"></script>
     <script src="index.js?2016071815" charset="utf-8"></script>
 
   </body>
