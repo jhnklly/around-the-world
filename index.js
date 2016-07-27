@@ -159,7 +159,7 @@ function init() {
 
 d3.select('input[name=opts]:checked')
   .on('change', function(v) {
-  A.data.features = shuffle(A.data.features);
+    resetData(A.dataUrl);
 });
 
 function resetData(fileUrl) {
@@ -177,13 +177,15 @@ function resetData(fileUrl) {
       return el.properties.name && el.properties.name.length > 0;
     });
 
-    A.names = A.data.features.map(function(v){
-      return v.properties.name;
-    });
+    console.log($('input[name=opts]:checked').val() );
 
     if ( $('input[name=opts]:checked').val() == 'random' ) {
       A.data.features = shuffle(A.data.features);
     }
+
+    A.names = A.data.features.map(function(v){
+      return v.properties.name;
+    });
 
     A.namesPop = A.names;
     A.namesAlpha = sortCopy(A.names);
@@ -221,6 +223,7 @@ function resetData(fileUrl) {
     A.typeahead = $('#response').typeahead({
       hint: true,
       highlight: true,
+      autoselect: true,
       minLength: 1
     },
     {
@@ -270,7 +273,6 @@ function resetData(fileUrl) {
 
     }
 
-    console.log(currFeature.properties.name);
     A.gjLayer.eachLayer(function (layer) {
       //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
@@ -317,6 +319,7 @@ $('input.typeahead').keypress(function (e) {
 
         var selectedValue = $('input.tt-hint').val() || $('input.tt-input').val()
 
+        // Grab the first hint, but not if another hint is clicked
         var selection = $('input.typeahead').parent().find('.tt-selectable:first')[0];
 
         if (selection) {
