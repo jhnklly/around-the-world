@@ -229,7 +229,17 @@ function resetData(fileUrl) {
     {
       name: 'typeahead',
       source: substringMatcher(A.namesAlpha)
+    })
+    .on('typeahead:select', function(e,text){
+
+        $('input.typeahead').val(text);
+
+        $('#enter').click();
+        $('.typeahead').typeahead('close');
+        $('input.typeahead').val("");
+        return true;
     });
+
 
     //A.typeahead.data('typeahead').source = A.namesAlpha;
     $('#response').focus();
@@ -310,12 +320,34 @@ var substringMatcher = function(strs) {
   };
 };
 
+/*
+$('input.typeahead').on('select')(function (e, text) {
+    console.log(text);
+    $('input.typeahead').val(text);
+
+    $('#enter').click();
+    $('.typeahead').typeahead('close');
+    $('input.typeahead').val("");
+    return true;
+});
+*/
+
 $('input.typeahead').keypress(function (e) {
+
+   /* A.typeahead.on('typeahead:select', function(e,text){
+
+        $('input.typeahead').val(selectedValue);
+
+        $('#enter').click();
+        $('.typeahead').typeahead('close');
+        $('input.typeahead').val("");
+        return true;
+    });*/
+
     if (e.which == 13) {
         /*var selectedValue = $('input.typeahead').data().ttView.dropdownView.getFirstSuggestion().datum.id;
         $("#value_id").val(selectedValue);
         */
-
 
         var selectedValue = $('input.tt-hint').val() || $('input.tt-input').val()
 
