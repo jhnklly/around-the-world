@@ -174,7 +174,7 @@ function resetData(fileUrl) {
     }
 
     A.data.features = A.data.features.filter(function(el){
-      return el.properties.name && el.properties.name.length > 0;
+      return el.properties.name && el.properties.name.length > 0 && el.properties.homepart !== '-99.0' && el.properties.area_sqkm > 6000 || el.properties.name == 'Palestine';
     });
 
     console.log($('input[name=opts]:checked').val() );
