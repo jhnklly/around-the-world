@@ -308,16 +308,25 @@ function resetData(fileUrl) {
           layer.setStyle(A.correctStyle);
           A.countCorrect++;
           toast += A.currAttr + " was correct! ";
+          toast = '<i class="fa fa-check-circle" aria-hidden="true"></i>';
+          //toast = '<i class="material-icons">done</i>';
+          d3.select('#toast').classed('correct',true);
+          d3.select('#toast').classed('incorrect',false);
+
         } else {
           layer.setStyle(A.incorrectStyle);
           toast += "The correct answer was " + A.currAttr;
           toast += '<br>You said "' + document.querySelector('#response').value + '"';
+          //toast = "✕";
+          toast = '<i class="fa fa-times-circle" aria-hidden="true"></i>';
+          d3.select('#toast').classed('correct',false);
+          d3.select('#toast').classed('incorrect',true);
         }
         A.countAll++;
       }
     });
 
-    document.querySelector('#current-number').innerHTML = A.countAll + 1;
+    //document.querySelector('#current-number').innerHTML = A.countAll + 1;
     document.querySelector('#toast').innerHTML = toast;
     document.querySelector('#count-correct').innerHTML = A.countCorrect;
     document.querySelector('#count-all').innerHTML = A.countAll;
