@@ -71,7 +71,7 @@
 
     }
 
-    #opts, #opts-cog {
+    #opts, #opts-wrapper {
       position: fixed;
       z-index: 500;
       line-height: 1;
@@ -270,6 +270,13 @@ input:focus {
   outline: 0 none;
   //border-width: 1px;
 }
+
+  .btn-lg-jk {
+    display: inline-block;
+    background: #988;
+    font-size: 30px;
+  }
+
   </style>
 
   </head>
@@ -296,8 +303,10 @@ input:focus {
 
     </div>
 
-    <div id="opts-cog"  class="bottom left">
-      <i  data-toggle="collapse" data-target="#opts" class="fa fa-cog" aria-hidden="true"></i>
+    <div id="opts-wrapper"  class="bottom left">
+      <div class="btn-lg-jk">
+        <i  data-toggle="collapse" data-target="#opts" class="fa fa-cog" aria-hidden="true"></i>
+      </div>
       <div id="opts" class="collapse">
         <label><input type="radio" name="opts" value="pop" checked="checked"> Population</label>
         <br />
