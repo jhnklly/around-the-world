@@ -208,8 +208,9 @@ function init() {
   ;
 }
 
-d3.select('input[name=opts]:checked')
+d3.selectAll('input[name=opts]')
   .on('change', function(v) {
+    console.log('reset');
     resetData(A.dataUrl);
 });
 
@@ -228,10 +229,26 @@ function resetData(fileUrl) {
       return el.properties.name && el.properties.name.length > 0 && el.properties.homepart !== '-99.0' && el.properties.area_sqkm > 6000 || el.properties.name == 'Palestine';
     });
 
-    console.log($('input[name=opts]:checked').val() );
+    var sortOrder = $('input[name=opts]:checked').val();
 
-    if ( $('input[name=opts]:checked').val() == 'random' ) {
-      A.data.features = shuffle(A.data.features);
+    if (sortOrder === "random") {
+        A.data.features = shuffle(A.data.features);
+    }
+    if (sortOrder === "pop") {
+        A.data.features.sort(function(a,b){
+            console.log(a.properties.pop_mill);
+            if (a.properties.pop_mill > b.properties.pop_mill) {
+              return -1;
+            }
+            return 1;
+        });
+    }
+    if (sortOrder === "area") {
+        A.data.features.sort(function(a,b){
+            if (a.properties.area_sqkm > b.properties.area_sqkm)
+              return -1;
+            return 1;
+        });
     }
 
     A.names = A.data.features.map(function(v){

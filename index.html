@@ -71,12 +71,13 @@
 
     }
 
-    #opts {
+    #opts, #opts-cog {
       position: fixed;
       z-index: 500;
       line-height: 1;
       vertical-align: middle;
     }
+    #opts { bottom: 25px; }
 
     .bottom { bottom: 5px; }
     .left { left: 5px; }
@@ -295,24 +296,27 @@ input:focus {
 
     </div>
 
-    <div id="opts" class="bottom left">
-      <label><input type="radio" name="opts" value="pop"> Population</label>
-      <br />
-      <label><input type="radio" name="opts" value="area"> Area</label>
-      <br />
-      <label><input type="radio" name="opts" value="random" checked="checked"> Random</label>
-      <br />
+    <div id="opts-cog"  class="bottom left">
+      <i  data-toggle="collapse" data-target="#opts" class="fa fa-cog" aria-hidden="true"></i>
+      <div id="opts" class="collapse">
+        <label><input type="radio" name="opts" value="pop" checked="checked"> Population</label>
+        <br />
+        <label><input type="radio" name="opts" value="area"> Area</label>
+        <br />
+        <label><input type="radio" name="opts" value="random" > Random</label>
+        <br />
 
-      <select id="data-select">
-        <optgroup>
-          <option value="world">World</option>
-          <option value="sf">SF</option>
-          <option value="calif">California</option>
-          <option value="wild">wilderness</option>
-        </optgroup>
-      </select>
-      <br />
+        <select id="data-select">
+          <optgroup>
+            <option value="world">World</option>
+            <option value="sf">SF</option>
+            <option value="calif">California</option>
+            <option value="wild">wilderness</option>
+          </optgroup>
+        </select>
+        <br />
 
+      </div>
     </div>
 
 

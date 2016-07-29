@@ -87,7 +87,7 @@ function getCustomizer() {
 function setPopups(layer) {
     var new_dist, new_area;
 
-    console.log(layer);
+    //console.log(layer);
 
     layer.unbindPopup();
 
