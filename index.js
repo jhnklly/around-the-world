@@ -71,8 +71,8 @@ A.polyStyle = {
 A.focusStyle = {
     "color": "#fc0",
     "fillColor": "#fff",
-    "weight": 5,
-    "opacity": 0.8,
+    "weight": 4,
+    "opacity": 0.6,
     "fillOpacity": 1
 };
 A.correctStyle = {
