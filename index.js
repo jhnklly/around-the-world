@@ -94,6 +94,57 @@ A.currAttr = "test";
 A.countCorrect = 0;
 A.countAll = 0;
 
+styleRosetta = {
+  fillColor: {
+    css: "background-color",
+    leaflet: "fillColor",
+    simplestyle: "fill",
+    example: "#0ff",
+    type: "color"
+  },
+  strokeColor: {
+    css: "border-color",
+    leaflet: "color",
+    simplestyle: "fill-opacity",
+    example: "#f0f",
+    type: "color"
+  },
+  fillOpacity: {
+    css: "",
+    leaflet: "fillOpacity",
+    simplestyle: "",
+    example: 0.4,
+    type: "float"
+  },
+  strokeOpacity: {
+    css: "",
+    leaflet: "opacity",
+    simplestyle: "stroke-opacity",
+    example: 0.8,
+    type: "float"
+  },
+  strokeWidth: {
+    css: "border-width",
+    leaflet: "weight",
+    simplestyle: "stroke-width",
+    example: 3,
+    type: "float"
+  }
+}
+
+/*
+for (var k in styleRosetta) {
+  console.log(styleRosetta[k].css + ": " + styleRosetta[k].example + ";");
+  d3.select('.leaflet-popup-content').append('div')
+    .attr('class', 'swatch')
+    .text(styleRosetta[k].css + ": " + styleRosetta[k].example + ";")
+    .attr('style', function(){
+      var ret = styleRosetta[k].css + ": " + styleRosetta[k].example + ";";
+      return ret;
+    })
+}
+*/
+
 A.skip = ['San Francisco','Alameda','Contra Costa','Santa Clara','San Mateo','Santa Cruz','Marin','Sonoma','Napa','Solano','Mendocino','Monterey','Del Norte', 'Humboldt', 'San Luis Obispo', 'Santa Barbara', 'Ventura', 'Los Angeles','Orange','San Diego','San Bernardino','Riverside','San Joaquin','Lake'];
 A.level = "DIFFICULT";
 

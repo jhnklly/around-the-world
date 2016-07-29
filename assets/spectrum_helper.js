@@ -39,7 +39,7 @@ function initSpectrum(drawn_obj) {
             e.data.d_obj.options.custom_color = tinycolor.toHexString();
             //http://a.tiles.mapbox.com/v3/marker/pin-s+009900.png
         } else {
-            console.log(e.data.d_obj.options.style);
+            console.log(e.data.d_obj.feature.properties.name);
             var newStyle = {
               color: tinycolor.toHexString(),
               fillColor: tinycolor.toHexString(),
@@ -48,6 +48,7 @@ function initSpectrum(drawn_obj) {
               fillOpacity: 0.5
             };
             e.data.d_obj.setStyle(newStyle);
+            hackCopyStyleTo(newStyle, e.data.d_obj.feature.properties.name);
         }
         $("#colorPicker").css('border-color',outline_color);
         $("#colorPicker").css('background-color',fill_color);
@@ -63,11 +64,22 @@ function initSpectrum(drawn_obj) {
     });
 }
 
+function hackCopyStyleTo(style, foo) {
+  // foo is name; which half of alphabet?
+  var alpha_omega = foo.toUpperCase().trim() < "M" ? "alpha" : "omega";
+  A.gjLayer.eachLayer(function (layer) {
+    var lyr_alpha_omega = layer.feature.properties.name.toUpperCase().trim() < "M" ? "alpha" : "omega";
+    if(alpha_omega === lyr_alpha_omega) {
+      layer.setStyle(style);
+    }
+  });
+}
+
 function getCustomizer() {
     //customize_ui = createCustomizeUI();
     var customize_ui = '';
     customize_ui += '<div class="middle-aligner"> <a href="javascript:void(0)" id="colorPicker" class="button-c"> </a> ';
-    customize_ui += ' <a href="javascript:void(0)" id="custom_info_save" class="button-b">Save</a>';
+    //customize_ui += ' <a href="javascript:void(0)" id="custom_info_save" class="button-b">Save</a>';
     customize_ui += '</div>';
     return customize_ui;
 }
