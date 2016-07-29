@@ -314,7 +314,7 @@ function resetData(fileUrl) {
 
   });
 
-  d3.select("#enter").on("click", function(){
+  d3.select("#enter").on("click touchstart", function(){
     //var result = false;
     var response = document.querySelector('#response').value.toUpperCase().trim();
     var answer = A.currAttr.toUpperCase().trim();
