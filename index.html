@@ -77,7 +77,7 @@
       line-height: 1;
       vertical-align: middle;
     }
-    #opts { bottom: 25px; }
+    #opts { bottom: 35px; }
 
     .bottom { bottom: 5px; }
     .left { left: 5px; }
@@ -276,6 +276,33 @@ input:focus {
     font-size: 30px;
     color: #999;
   }
+  .btn-md-jk {
+    display: inline-block;
+    font-size: 20px;
+    color: #999;
+  }
+  .btn-sm-jk {
+    display: inline-block;
+    font-size: 10px;
+    color: #999;
+  }
+  #knowledge {
+    font-family: Helvetica, sans-serif;
+    font-size: 11px;
+    position: absolute;
+    margin-left: 36px;
+    margin-right: 40px;
+    /*width: 90%;*/
+    padding: 3px;
+    bottom: 1px;
+    background: rgba(255,255,255,0.6);
+    z-index: 900;
+  }
+  #knowledge-btn {
+    left: 8px;
+    bottom: 32px;
+    position: absolute;
+  }
 
   </style>
 
@@ -303,7 +330,15 @@ input:focus {
 
     </div>
 
+        <div id="knowledge" class="collapse"></div>
     <div id="opts-wrapper"  class="bottom left">
+        <a data-toggle="collapse" data-target="#knowledge" href="#knowledge" class="btn-md-jk" id="knowledge-btn">
+          <i class="fa fa-lightbulb-o" aria-hidden="true"></i>
+        </a>
+
+      <div>
+      </div>
+
       <div class="btn-lg-jk">
         <a data-toggle="collapse" data-target="#opts" href="#opts" class="btn-lg-jk">
           <i class="fa fa-cog" aria-hidden="true"></i>

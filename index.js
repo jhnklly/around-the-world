@@ -217,7 +217,6 @@ d3.selectAll('input[name=opts]')
 function resetData(fileUrl) {
 
   d3.json(fileUrl, function(data){
-    console.log(data);
     A.data = data;
     if ( A.level == "DIFFICULT") {
       A.data.features = A.data.features.filter(function(el){
@@ -236,7 +235,6 @@ function resetData(fileUrl) {
     }
     if (sortOrder === "pop") {
         A.data.features.sort(function(a,b){
-            console.log(a.properties.pop_mill);
             if (a.properties.pop_mill > b.properties.pop_mill) {
               return -1;
             }
@@ -272,15 +270,10 @@ function resetData(fileUrl) {
     //var currFeature = A.data.features[getRandomInt(0,A.data.features.length)];
     A.currAttr = currFeature.properties.name;
 
-    console.log(currFeature.properties.name);
     A.gjLayer.eachLayer(function (layer) {
       setPopups(layer);
       if(layer.feature.properties.name === A.currAttr) {
-        console.log(layer.feature.properties.name );
-        console.log(layer.getBounds());
-        //debugger;
         A.map.fitBounds(layer.getBounds(), boundsOpts);
-        //A.map.fitBounds(layer.getBounds());
         layer.setStyle(A.focusStyle)
       }
     });
@@ -301,7 +294,7 @@ function resetData(fileUrl) {
     .on('typeahead:select', function(e,text){
 
         $('input.typeahead').val(text);
-
+        console.log(text);
         $('#enter').click();
         $('.typeahead').typeahead('close');
         $('input.typeahead').val("");
@@ -314,11 +307,12 @@ function resetData(fileUrl) {
 
   });
 
-  d3.select("#enter").on("click touchstart", function(){
+  d3.select("#enter").on("click", function(){
     //var result = false;
     var response = document.querySelector('#response').value.toUpperCase().trim();
     var answer = A.currAttr.toUpperCase().trim();
     var toast = "";
+
     A.gjLayer.eachLayer(function (layer) {
       if(layer.feature.properties.name === A.currAttr) {
         if ( response === answer ) {
@@ -352,13 +346,10 @@ function resetData(fileUrl) {
 
     var currFeature = A.data.features[A.currInt];
     A.currInt++;
-    //var currFeature = A.data.features[getRandomInt(0,A.data.features.length)];
-    //A.currAttr = currFeature.properties.name;
-    if (1==1) {
-      A.currAttr = A.namesPop[A.currInt];
-    } else {
+    A.currAttr = A.namesPop[A.currInt];
 
-    }
+    //$('#knowledge').collapse('hide');
+    getKnowledge(A.currAttr);
 
     A.gjLayer.eachLayer(function (layer) {
       //console.log(layer);
@@ -374,6 +365,118 @@ function resetData(fileUrl) {
 
 }
 
+function getKnowledge(text) {
+
+/*  var placesAPIKey = "AIzaSyDof1OssjhDFQWyyxqonAAAkknelZkJ6EU";
+  var placesQuery = "https://kgsearch.googleapis.com/v1/entities:search?query="+text+"&key="+placesAPIKey+"&limit=1&indent=True";
+
+  var placesQuery = "https://en.wikivoyage.org/w/api.php?action=query&titles="+text+"&prop=revisions&rvprop=content&format=json"
+  console.log(placesQuery);
+*/
+  /*var service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
+  var params = {
+    'query': text,
+    'limit': 1,
+    'indent': true,
+    'key' : placesAPIKey,
+  };*/
+  var ret = "";
+  //$.getJSON(service_url + '?callback=?', params, function(response) {
+  /*
+  $.getJSON(placesQuery, function(response) {
+    console.log(response);
+    //ret = response.itemListElement[0].result.detailedDescription.articleBody;
+    pages = response.query.pages;
+    for (var page in pages) {
+      revision = pages[page].revisions[0];
+      console.log(revision);
+    }
+    ret = replaceAll(ret, text, "...");
+    //return ret;
+    document.querySelector('#knowledge').innerHTML = ret;
+  });
+*/
+
+/*  var queryData = {
+    action: "query",
+    titles: text,
+    prop: "revisions",
+    rvprop: "contents",
+    //origin: "http://localhost:8000/",
+    origin: "https://en.wikipedia.org/",
+    format: "json"
+  };
+  var queryData = text;
+*/
+  $.ajax( {
+      url: "https://en.wikivoyage.org/w/api.php",
+      jsonp: "callback",
+      dataType: 'jsonp',
+      data: {
+        action: "query",
+        titles: text,
+        prop: "revisions",
+        rvprop: "content",
+        format: "json"
+      },
+      xhrFields: { withCredentials: true },
+      error: function (){
+        document.querySelector('#knowledge').innerHTML = "";
+      },
+      success: function(response) {
+        pages = response.query.pages;
+        for (var page in pages) {
+          revision = pages[page].revisions[0]["*"];
+
+          //rev = revision.split("Quickbar")[1];
+          rev = revision.split("nofollow")[1];
+          rev = revision.split("==Regions==")[0];
+          //console.log(rev);
+
+          // 2nd call just to parse template format to html
+          $.ajax( {
+              url: "https://en.wikipedia.org/w/api.php",
+              jsonp: "callback",
+              dataType: 'jsonp',
+              data: {
+                action: "parse",
+                text: rev,
+                format: "json"
+              },
+              xhrFields: { withCredentials: true },
+              error: function (){
+                document.querySelector('#knowledge').innerHTML = "";
+              },
+              success: function(response2) {
+                ret = response2.parse.text["*"];
+                ret_arr = ret.split(". ");
+                ret = ret_arr[ret_arr.length - 1];
+                ret = replaceAll(ret, text, "...");
+                ret = replaceAll(ret, "<p></p>", "");
+                ret = replaceAll(ret, "<p><br /></p>", "");
+                ret = ret.split("<!--")[0];
+                ret = "<p>" + ret.trim();
+                console.log(ret);
+
+                document.querySelector('#knowledge').innerHTML = ret;
+              }
+          });
+
+        }
+        //console.log(response);
+      }
+  });
+
+}
+
+function escapeRegExp(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+}
+
+function replaceAll(target, search, replacement) {
+    //var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 
 var substringMatcher = function(strs) {
   return function findMatches(q, cb) {
