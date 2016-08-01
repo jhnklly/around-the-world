@@ -29,17 +29,17 @@ var boundsOpts = {
 
 A.basemaps = [
   {
-    "url": "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+    "url": "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
     "attribution": '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>',
     "maxZoom": 19
   },
   {
-    "url": "http://{s}.tile.openstreetmap.us/usgs_large_scale/{z}/{x}/{y}.png",
+    "url": "https://{s}.tile.openstreetmap.us/usgs_large_scale/{z}/{x}/{y}.png",
     "attribution": 'USGS Large Scale Imagery',
     "maxZoom": 20
   },
   {
-    "url": "http://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}.png",
+    "url": "https://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}.png",
     "attribution": 'Map tiles by <a target="_blank" href="http://www.esri.com">esri</a>.',
     "maxZoom": 18
   },
@@ -328,6 +328,7 @@ function resetData(fileUrl) {
           layer.setStyle(A.incorrectStyle);
           toast += "The correct answer was " + A.currAttr;
           toast += '<br>You said "' + document.querySelector('#response').value + '"';
+          console.log(toast);
           //toast = "✕";
           toast = '<i class="fa fa-times-circle" aria-hidden="true"></i>';
           d3.select('#toast').classed('correct',false);
