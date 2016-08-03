@@ -60,6 +60,7 @@ A.datasets = {
   "sf": { file: "sf_planning_neighborhoods.geojson", baseIdx: 3 },
   "wild": { file: "wilderness_norcal.geojson", baseIdx: 3 },
 };
+A.currDataName = "world";
 
 A.polyStyle = {
     "color": "#000",
@@ -146,7 +147,7 @@ for (var k in styleRosetta) {
 */
 
 A.skip = ['San Francisco','Alameda','Contra Costa','Santa Clara','San Mateo','Santa Cruz','Marin','Sonoma','Napa','Solano','Mendocino','Monterey','Del Norte', 'Humboldt', 'San Luis Obispo', 'Santa Barbara', 'Ventura', 'Los Angeles','Orange','San Diego','San Bernardino','Riverside','San Joaquin','Lake'];
-A.level = "DIFFICULT";
+A.level = "ADVANCED";
 
 document.addEventListener("DOMContentLoaded", function(event) {
   init();
@@ -170,7 +171,8 @@ function init() {
   d3.select('#data-select')
     .on('change', function(v){
       var optValue = d3.select(this).property('value');
-      A.datasets[optValue].file;
+      //A.datasets[optValue].file;
+      A.currDataName = optValue;
 
       //var fileUrl = "assets/" + d3.select(this).property('value');
       var fileUrl = "assets/" + A.datasets[optValue].file;
@@ -184,22 +186,6 @@ function init() {
           attribution: A.basemaps[basemapIdx].attribution
       });
       A.baselayer.addTo( A.map );
-      /*
-      if ( d3.select(this).property('value') === "wilderness_norcal.geojson" ) {
-        var basemapIdx = 3;
-        A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
-            maxZoom: 20,
-            attribution: A.basemaps[basemapIdx].attribution
-        });
-        A.baselayer.addTo( A.map );
-      } else {
-        var basemapIdx = 2;
-        A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
-            maxZoom: 20,
-            attribution: A.basemaps[basemapIdx].attribution
-        });
-        A.baselayer.addTo( A.map );
-      }*/
 
       // Move cursor to input
       $('#response').focus();
@@ -208,32 +194,46 @@ function init() {
   ;
 }
 
+d3.selectAll('input[name=advanced]')
+  .on('change', function(v) {
+    resetData(A.dataUrl);
+});
+
 d3.selectAll('input[name=opts]')
   .on('change', function(v) {
-    console.log('reset');
     resetData(A.dataUrl);
 });
 
 function resetData(fileUrl) {
+  A.level = $('input[name=advanced]:checked').val();
+  console.log(A.level);
 
   d3.json(fileUrl, function(data){
     A.data = data;
-    if ( A.level == "DIFFICULT") {
+    if ( A.level == "ADVANCED") {
       A.data.features = A.data.features.filter(function(el){
         return A.skip.indexOf(el.properties.name) < 0;
       });
     }
 
-    A.data.features = A.data.features.filter(function(el){
-      return el.properties.name && el.properties.name.length > 0 && el.properties.homepart !== '-99.0' && el.properties.area_sqkm > 6000 || el.properties.name == 'Palestine';
-    });
+    if (A.currDataName === "world") {
+      A.data.features = A.data.features.filter(function(el){
+        return el.properties.name && el.properties.name.length > 0 && el.properties.homepart !== '-99.0' && el.properties.area_sqkm > 6000 || el.properties.name == 'Palestine';
+      });
+
+      if ( A.level == "ADVANCED") {
+        A.data.features = A.data.features.filter(function(el){
+          return el.properties.continent === 'Africa';
+        });
+      }
+    }
 
     var sortOrder = $('input[name=opts]:checked').val();
 
     if (sortOrder === "random") {
         A.data.features = shuffle(A.data.features);
     }
-    if (sortOrder === "pop") {
+    if (A.currDataName === "world" && sortOrder === "pop") {
         A.data.features.sort(function(a,b){
             if (a.properties.pop_mill > b.properties.pop_mill) {
               return -1;
@@ -241,7 +241,7 @@ function resetData(fileUrl) {
             return 1;
         });
     }
-    if (sortOrder === "area") {
+    if (A.currDataName === "world" && sortOrder === "area") {
         A.data.features.sort(function(a,b){
             if (a.properties.area_sqkm > b.properties.area_sqkm)
               return -1;
@@ -263,7 +263,6 @@ function resetData(fileUrl) {
       style: A.polyStyle
     });
     A.gjLayer.addTo(A.map);
-
 
     var currFeature = A.data.features[A.currInt];
     //A.currInt++;
