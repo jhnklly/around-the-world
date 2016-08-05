@@ -246,9 +246,11 @@ function resetData() {
     }
 
     if (A.currDataName !== "world") {
-      $('input[name=opts][value=random').click();
+      //$('option[value=random]').click();
+      $('#sort-select').val("random").change();
     }
-    var sortOrder = $('input[name=opts]:checked').val();
+    //var sortOrder = $('input[name=opts]:checked').val();
+    var sortOrder = d3.select('#sort-select').property('value');
 
     if (sortOrder === "random") {
         A.data.features = shuffle(A.data.features);

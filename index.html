@@ -375,14 +375,14 @@ input:focus {
       </div>
 
       <div id="opts" class="collapse">
-        <label><input type="checkbox" name="advanced" value="ADVANCED"> Advanced</label>
-        <br />
+
+        <!--
         <label><input type="radio" name="opts" value="pop" checked="checked"> Population</label>
         <br />
         <label><input type="radio" name="opts" value="area"> Area</label>
         <br />
         <label><input type="radio" name="opts" value="random" > Random</label>
-        <br />
+        <br /> -->
 
         <select id="data-select">
           <optgroup>
@@ -392,6 +392,18 @@ input:focus {
             <option value="wild">wilderness</option>
           </optgroup>
         </select>
+        <br />
+
+        <select id="sort-select" name="opts">
+          <optgroup>
+            <option value="pop">Population</option>
+            <option value="area">Area</option>
+            <option value="random">Random</option>
+          </optgroup>
+        </select>
+        <br />
+
+        <label><input type="checkbox" name="advanced" value="ADVANCED"> Advanced</label>
         <br />
 
       </div>
