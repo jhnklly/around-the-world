@@ -82,6 +82,7 @@
     .top { top: 5px; }
     .bottom { bottom: 5px; }
     .left { left: 5px; }
+    .right { right: 5px; }
 
     label, input {
       vertical-align: middle;
@@ -309,7 +310,7 @@ input:focus {
     //font-family: Helvetica, sans-serif;
     font-size: 11px;
     position: absolute;
-    margin-left: 26px;
+    margin-right: 26px;
     //margin-right: 40px;
     /*width: 90%;*/
     padding: 3px;
@@ -350,13 +351,13 @@ input:focus {
 
     </div>
 
-    <div class="fixed top left">
-      <a data-toggle="collapse" data-target="#capital" href="#capital" class="btn-md-jk" id="star-btn">
+    <div class="fixed top right">
+      <a data-toggle="collapse" data-target="#capital" href="#capital" class="btn-md-jk right" id="star-btn">
         <i class="fa fa-star-o" aria-hidden="true"></i>
       </a>
     </div>
 
-    <div id="capital" class="top left collapse">Capital</div>
+    <div id="capital" class="top right collapse">Capital</div>
     <div id="knowledge" class="collapse">Wiki</div>
 
     <div id="opts-wrapper"  class="bottom left">
