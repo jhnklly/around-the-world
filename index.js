@@ -52,10 +52,10 @@ A.basemaps = [
 var basemapIdx = 0;
 
 
-A.dataUrl = "assets/ne50_aroundworld.geojson";
+A.dataUrl = "assets/ne50_aroundworld_caps.geojson";
 //A.dataUrl = "assets/ca_counties_simp2.geojson";
 A.datasets = {
-  "world": { file: "ne50_aroundworld.geojson", baseIdx: 0 },
+  "world": { file: "ne50_aroundworld_caps.geojson", baseIdx: 0 },
   "calif": { file: "ca_counties_simp2.geojson", baseIdx: 3 },
   "sf": { file: "sf_planning_neighborhoods.geojson", baseIdx: 3 },
   "wild": { file: "wilderness_norcal.geojson", baseIdx: 3 },
@@ -206,6 +206,21 @@ function resetData() {
 
 
   d3.json(fileUrl, function(data){
+
+/*
+    d3.json("assets/ne50_capitals.geojson", function(data){
+      A.capitals = data;
+      data.features.forEach(function(cityFeat){
+        console.log(cityFeat.properties.sov_a3)
+        A.data.features.forEach(function(countryFeat){
+          if (cityFeat.properties.sov_a3 === countryFeat.properties.iso_a3) {
+            console.log(cityFeat.properties.name);
+            countryFeat.properties.capital = cityFeat.properties.name;
+          }
+        })
+      });
+    });*/
+
     A.data = data;
     if ( A.level == "ADVANCED") {
       A.data.features = A.data.features.filter(function(el){
@@ -359,9 +374,8 @@ function resetData() {
     A.gjLayer.eachLayer(function (layer) {
       //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
-
-        $('#capital').val(layer.feature.properties.capital || "");
-
+        console.log(layer.feature.properties.capital);
+        document.querySelector('#capital').innerHTML = layer.feature.properties.capital || "";
         setTimeout(function(){
           A.map.fitBounds(layer.getBounds(), boundsOpts );
         }, 1000);
@@ -598,5 +612,6 @@ function shuffle(array) {
   return array;
 }
 
-
-
+/*
+ogr2ogr -f geojson -where "adm0cap > 0" ne50_capitals.geojson ne_50m_populated_places_simple.shp
+*/
