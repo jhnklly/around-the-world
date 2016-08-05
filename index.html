@@ -71,7 +71,7 @@
 
     }
 
-    #opts, #opts-wrapper {
+    #opts, #opts-wrapper, .fixed {
       position: fixed;
       z-index: 500;
       line-height: 1;
@@ -79,6 +79,7 @@
     }
     #opts { bottom: 35px; }
 
+    .top { top: 5px; }
     .bottom { bottom: 5px; }
     .left { left: 5px; }
 
@@ -304,6 +305,25 @@ input:focus {
     position: absolute;
   }
 
+  #capital {
+    //font-family: Helvetica, sans-serif;
+    font-size: 11px;
+    position: absolute;
+    margin-left: 26px;
+    //margin-right: 40px;
+    /*width: 90%;*/
+    padding: 3px;
+    top: 50px;
+    //bottom: 1px;
+    background: rgba(255,255,255,0.6);
+    z-index: 900;
+  }
+  #star-btn {
+    //left: 8px;
+    top: 44px;
+    position: absolute;
+  }
+
   </style>
 
   </head>
@@ -330,7 +350,15 @@ input:focus {
 
     </div>
 
-        <div id="knowledge" class="collapse"></div>
+    <div class="fixed top left">
+      <a data-toggle="collapse" data-target="#capital" href="#capital" class="btn-md-jk" id="star-btn">
+        <i class="fa fa-star-o" aria-hidden="true"></i>
+      </a>
+    </div>
+
+    <div id="capital" class="top left collapse">Capital</div>
+    <div id="knowledge" class="collapse">Wiki</div>
+
     <div id="opts-wrapper"  class="bottom left">
         <a data-toggle="collapse" data-target="#knowledge" href="#knowledge" class="btn-md-jk" id="knowledge-btn">
           <i class="fa fa-lightbulb-o" aria-hidden="true"></i>
@@ -344,6 +372,7 @@ input:focus {
           <i class="fa fa-cog" aria-hidden="true"></i>
         </a>
       </div>
+
       <div id="opts" class="collapse">
         <label><input type="checkbox" name="advanced" value="ADVANCED"> Advanced</label>
         <br />

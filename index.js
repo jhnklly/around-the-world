@@ -56,7 +56,7 @@ A.dataUrl = "assets/ne50_aroundworld.geojson";
 //A.dataUrl = "assets/ca_counties_simp2.geojson";
 A.datasets = {
   "world": { file: "ne50_aroundworld.geojson", baseIdx: 0 },
-  "calif": { file: "ca_counties_simp2.geojson", baseIdx: 2 },
+  "calif": { file: "ca_counties_simp2.geojson", baseIdx: 3 },
   "sf": { file: "sf_planning_neighborhoods.geojson", baseIdx: 3 },
   "wild": { file: "wilderness_norcal.geojson", baseIdx: 3 },
 };
@@ -157,39 +157,15 @@ function init() {
   A.map = L.map('fullMap',{'zoomControl': true, 'attributionControl': false}).setView([LAT, LON], ZED);
   A.baselayer.addTo( A.map );
 
-  /*L.control.zoom({
-       position:'topright'
-  }).addTo(A.map);*/
-
   A.map.zoomControl.setPosition('bottomright');
   //A.map.attributionControl.setPrefix('');
   //A.map.attributionControl = false;
-
 
   resetData(A.dataUrl);
 
   d3.select('#data-select')
     .on('change', function(v){
-      var optValue = d3.select(this).property('value');
-      //A.datasets[optValue].file;
-      A.currDataName = optValue;
-
-      //var fileUrl = "assets/" + d3.select(this).property('value');
-      var fileUrl = "assets/" + A.datasets[optValue].file;
-      resetData(fileUrl);
-
-      console.log(d3.select(this).property('value'));
-      basemapIdx = A.datasets[optValue].baseIdx;
-
-      A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
-          maxZoom: 20,
-          attribution: A.basemaps[basemapIdx].attribution
-      });
-      A.baselayer.addTo( A.map );
-
-      // Move cursor to input
-      $('#response').focus();
-
+      resetData();
     })
   ;
 }
@@ -204,9 +180,30 @@ d3.selectAll('input[name=opts]')
     resetData(A.dataUrl);
 });
 
-function resetData(fileUrl) {
+//function resetData(fileUrl) {
+function resetData() {
+  // Get the dataset/filename
+  var optValue = d3.select('#data-select').property('value');
+  var fileUrl = "assets/" + A.datasets[optValue].file;
+  A.currDataName = optValue;
+
+  // Advanced?
   A.level = $('input[name=advanced]:checked').val();
-  console.log(A.level);
+
+  // Set the appropriate basemap
+  // If advanced, use a map without labels
+  if (A.level === "ADVANCED" && A.currDataName !== "world") {
+    basemapIdx = 2;
+  } else {
+    basemapIdx = A.datasets[optValue].baseIdx;
+  }
+  A.map.removeLayer(A.baselayer);
+  A.baselayer = L.tileLayer(A.basemaps[basemapIdx].url, {
+      maxZoom: 20,
+      attribution: A.basemaps[basemapIdx].attribution
+  });
+  A.baselayer.addTo( A.map );
+
 
   d3.json(fileUrl, function(data){
     A.data = data;
@@ -216,7 +213,12 @@ function resetData(fileUrl) {
       });
     }
 
+    A.polyStyle.fillOpacity = 0.7;
+    A.focusStyle.fillOpacity = 0;
+
     if (A.currDataName === "world") {
+      A.polyStyle.fillOpacity = defaultFillOpacity;
+      A.focusStyle.fillOpacity = defaultFillOpacity;
       A.data.features = A.data.features.filter(function(el){
         return el.properties.name && el.properties.name.length > 0 && el.properties.homepart !== '-99.0' && el.properties.area_sqkm > 6000 || el.properties.name == 'Palestine';
       });
@@ -228,6 +230,9 @@ function resetData(fileUrl) {
       }
     }
 
+    if (A.currDataName !== "world") {
+      $('input[name=opts][value=random').click();
+    }
     var sortOrder = $('input[name=opts]:checked').val();
 
     if (sortOrder === "random") {
@@ -354,6 +359,9 @@ function resetData(fileUrl) {
     A.gjLayer.eachLayer(function (layer) {
       //console.log(layer);
       if(layer.feature.properties.name === A.currAttr) {
+
+        $('#capital').val(layer.feature.properties.capital || "");
+
         setTimeout(function(){
           A.map.fitBounds(layer.getBounds(), boundsOpts );
         }, 1000);
@@ -362,6 +370,9 @@ function resetData(fileUrl) {
     });
 
   });
+
+  // Move cursor to input
+  $('#response').focus();
 
 }
 
