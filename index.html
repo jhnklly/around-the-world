@@ -325,6 +325,31 @@ input:focus {
     position: absolute;
   }
 
+    /* remove label background elements */
+    .leaflet-tooltip.city-labels {
+        background-color: transparent;
+        //border: transparent;
+        box-shadow: none;
+        font-weight: bold;
+        font-size: 12px;
+        width: 120px;
+        height: 23px;
+        border: 1px solid #777;
+    }
+
+    .div-icon {
+        // border: 1px solid green;
+        font-family: "Avenir Next Condensed", "Arial Narrow";
+        font-size: 10px;
+        color: #333;
+        line-height: 10px;
+        text-align: center;
+    }
+
+    .display-block { display: block; }
+    .display-none { display: none; }
+
+
   </style>
 
   </head>
@@ -387,9 +412,9 @@ input:focus {
         <select id="data-select">
           <optgroup>
             <option value="world">World</option>
-            <option value="sf">SF</option>
             <option value="calif">California</option>
             <option value="wild">wilderness</option>
+            <option value="sf">SF</option>
           </optgroup>
         </select>
         <br />
@@ -404,13 +429,19 @@ input:focus {
         <br />
 
         <label><input type="checkbox" name="advanced" value="ADVANCED"> Advanced</label>
+        <label><input type="checkbox" name="study" value="STUDY"> Study</label>
         <br />
 
       </div>
     </div>
 
 
-    <script src="assets/leaflet.js"></script>
+    <!--
+    <script src="assets/leaflet-1.2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.1.0/leaflet.js"></script>
+    <script src="assets/leaflet/leaflet-src.js"></script>
+    -->
+    <script src="assets/leaflet-1.0.js"></script>
     <script src="assets/leaflet-hash.js" charset="utf-8"></script>
     <!--
     <script src="assets/Leaflet.Sleep.js" charset="utf-8"></script>

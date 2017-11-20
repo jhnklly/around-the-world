@@ -1,5 +1,7 @@
 /*
 TODO:
+    After answered: add that label
+    Study Mode: label answers
 Logic:
 
 */
@@ -26,6 +28,7 @@ var boundsOpts = {
   maxZoom: 20
 };
 
+A.studyMode = true;
 
 A.basemaps = [
   {
@@ -156,6 +159,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function init() {
   A.map = L.map('fullMap',{'zoomControl': true, 'attributionControl': false}).setView([LAT, LON], ZED);
   A.baselayer.addTo( A.map );
+  var hash = new L.Hash(A.map);
 
   A.map.zoomControl.setPosition('bottomright');
   //A.map.attributionControl.setPrefix('');
@@ -175,12 +179,32 @@ d3.selectAll('input[name=advanced]')
     resetData(A.dataUrl);
 });
 
+d3.selectAll('input[name=study]')
+  .on('change', function(v) {
+    // if (A.studyMode == "")
+    // toggleStudyMode(A.dataUrl);
+    /*A.gjLayer.eachLayer(function (layer) {
+        layer.studyLabel.
+    }*/
+    // Just toggle display of class?
+    var checkit = document.querySelector('input[name=study]:checked');
+    console.log("checkit", checkit);
+    if (checkit) {
+        d3.selectAll('.leaflet-marker-icon').classed('display-none', true);
+    } else {
+        d3.selectAll('.leaflet-marker-icon').classed('display-none', false);
+    }
+});
+
 d3.selectAll('input[name=opts]')
   .on('change', function(v) {
     resetData(A.dataUrl);
 });
 
-//function resetData(fileUrl) {
+function toggleStudyMode() {
+
+}
+
 function resetData() {
   // Get the dataset/filename
   var optValue = d3.select('#data-select').property('value');
@@ -292,7 +316,21 @@ function resetData() {
     A.currAttr = currFeature.properties.name;
 
     A.gjLayer.eachLayer(function (layer) {
-      setPopups(layer);
+      // setPopups(layer);
+      // layer.unbindPopup();
+      if (A.studyMode == true) {
+        var myIcon = L.divIcon({
+            iconSize: new L.Point(25, 25),
+            className: 'div-icon',
+            html: layer.feature.properties.name,
+            popupAnchor: [0, 30]
+        });
+        var polygonCenter = layer.getBounds().getCenter();
+        layer.studyLabel = L.marker(polygonCenter, {
+            icon: myIcon
+        }).addTo(A.map);
+      }
+
       if(layer.feature.properties.name === A.currAttr) {
         A.map.fitBounds(layer.getBounds(), boundsOpts);
         layer.setStyle(A.focusStyle)
@@ -588,4 +626,215 @@ function shuffle(array) {
 
 /*
 ogr2ogr -f geojson -where "adm0cap > 0" ne50_capitals.geojson ne_50m_populated_places_simple.shp
+*/
+
+A.pointStyle = {
+    radius: 3,
+    fillColor: "#2af",
+    color: "#2af",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.3
+};
+
+
+function addCities() {
+    d3.json('assets/ca_county_seats.geojson', function(data){
+        /*        A.gjCountySeats = L.geoJson(data, {
+            pointToLayer: function (feature, latlng) {
+                var label = String(feature.properties.geoname); // .bindTooltip can't use straight 'feature.properties.attribute'
+                return new L.circleMarker(latlng, A.pointStyle)
+                .bindTooltip(label, {
+                    permanent: true,
+                    direction: "center",
+                    className: "city-labels",
+                }).openTooltip().closeTooltip();
+            } // end pointToLayer
+        }); // end L.geoJson
+        */
+
+        A.gjCountySeats = L.geoJSON(data, {
+            pointToLayer: function (feature, latlng) {
+                var myIcon = L.divIcon({
+                    iconSize: new L.Point(25, 25),
+                    className: 'div-icon',
+                    //iconSize: [40,40],
+                    html: feature.properties.geoname,
+                    // popupAnchor: [0, -10]
+                });
+
+                return L.marker(latlng, {icon: myIcon});
+            }
+
+        }).addTo(A.map);
+
+
+/*
+function onEachFeature(feature, layer) {
+    console.log("custom onEachFeature");
+    layer.bindTooltip(feature.properties.name, {
+        permanent:true,
+        direction:'center',
+        className: 'countryLabel',
+        // offset: [0,0],
+    });
+}
+
+
+    var show_label_zoom = 5; // zoom level threshold for showing/hiding labels
+    var labels_visible = true;
+    function show_hide_labels() {
+        var cur_zoom = A.map.getZoom();
+        console.log(cur_zoom);
+        if(labels_visible && cur_zoom < show_label_zoom) {
+            labels_visible = false;
+            A.gjCountySeats.eachLayer(function (layer) {
+                console.log(layer);
+                layer.hideLabel && layer.hideLabel();
+            });
+        }
+        else if(!labels_visible && cur_zoom >= show_label_zoom) {
+            labels_visible = true;
+            console.log("lv true");
+            A.gjCountySeats.eachLayer(function (layer, x) {
+                console.log(layer);
+                console.log(x);
+                layer.showLabel && layer.showLabel();
+            });
+        } else if(cur_zoom >= show_label_zoom) {
+            console.log("wtf");
+            labels_visible = true;
+            console.log("lv true");
+            A.gjCountySeats.eachLayer(function (layer) {
+                layer.openTooltip();
+                // debugger;
+            });
+        }
+        console.log(labels_visible);
+    }
+    A.map.on('zoomend', show_hide_labels);
+    show_hide_labels();
+*/
+
+    }); // end d3.json (cities)
+/*
+    var geoJsonLayer = L.geoJson(featureCollection, {
+        onEachFeature: function (feature, layer) {
+            layer.bindLabel(feature.geometry.coordinates.toString());
+        }
+    }).addTo(A.map);
+
+    var visible;
+
+    // Attach map zoom handler
+    map.on('zoomend', function (e) {
+        // Check zoom level
+        if (map.getZoom() > 10) {
+            // Check if not already shown
+            if (!visible) {
+                // Loop over layers
+                A.geoJsonLayer.eachLayer(function (layer) {
+                    // Show label
+                    layer.showLabel();
+                });
+                // Set visibility flag
+                visible = true;
+            }
+        } else {
+            // Check if not already hidden
+            if (visible) {
+                // Loop over layers
+                A.geoJsonLayer.eachLayer(function (layer) {
+                    // Hide label
+                    layer.hideLabel();
+                });
+                // Set visibility flag
+                visible = false;
+            }
+        }
+    });
+*/
+
+
+} // end addCities
+/*
+
+    var show_label_zoom = 5; // zoom level threshold for showing/hiding labels
+    var labels_visible = true;
+    function show_hide_labels() {
+        var cur_zoom = A.map.getZoom();
+        console.log(cur_zoom);
+        if(labels_visible && cur_zoom < show_label_zoom) {
+            labels_visible = false;
+            A.gjCountySeats.eachLayer(function (layer) {
+                console.log(layer);
+                layer.hideLabel && layer.hideLabel();
+            });
+        }
+        else if(!labels_visible && cur_zoom >= show_label_zoom) {
+            labels_visible = true;
+            console.log("lv true");
+            A.gjCountySeats.eachLayer(function (layer, x) {
+                console.log(layer);
+                console.log(x);
+                layer.showLabel && layer.showLabel();
+            });
+        } else {
+            console.log("wtf");
+            labels_visible = true;
+            console.log("lv true");
+            A.gjCountySeats.eachLayer(function (layer, x) {
+                console.log(layer);
+                console.log(x);
+                layer.showLabel && layer.showLabel();
+            });
+        }
+        console.log(labels_visible);
+    }
+    A.map.on('zoomend', show_hide_labels);
+    show_hide_labels();
+
+
+
+
+var data_points = {
+    "type": "FeatureCollection",
+    "name": "test-points-short-named",
+    "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+    "features": [
+    { "type": "Feature", "properties": { "name": "1" }, "geometry": { "type": "Point", "coordinates": [ -135.02507178240552, 60.672508785052223 ] } },
+    { "type": "Feature", "properties": { "name": "6"}, "geometry": { "type": "Point", "coordinates": [ -135.02480935075292, 60.672888247036376 ] } },
+    { "type": "Feature", "properties": { "name": "12"}, "geometry": { "type": "Point", "coordinates": [ -135.02449372349508, 60.672615176262731 ] } },
+    { "type": "Feature", "properties": { "name": "25"}, "geometry": { "type": "Point", "coordinates": [ -135.0240752514004, 60.673313811878423 ] } }
+    ]};
+
+var pointLayer = L.geoJSON(null, {
+  pointToLayer: function(feature,latlng){
+    label = String(feature.properties.name) // Must convert to string, .bindTooltip can't use straight 'feature.properties.attribute'
+    return new L.CircleMarker(latlng, {
+      radius: 1,
+    }).bindTooltip(label, {permanent: true, opacity: 0.7}).openTooltip();
+    }
+  });
+pointLayer.addData(data_points);
+mymap.addLayer(pointLayer);
+
+
+
+marker.bindTooltip('<img src=' + geoConfig.img + '/>' + geoConfig.description.title);
+marker.bindTooltip('<img src=' + geoConfig.img + '/>' + geoConfig.description.title).openTooltip();
+marker.bindTooltip('<img src=' + geoConfig.img + '/>' + geoConfig.description.title).closeTooltip();
+
+
+var pointLayer = L.geoJSON(null, {
+  pointToLayer: function(feature,latlng){
+    label = String(feature.properties.name) // .bindTooltip can't use straight 'feature.properties.attribute'
+    return new L.CircleMarker(latlng, {
+      radius: 0.1,
+    }).bindTooltip(label, {permanent: true, direction: "center", className: "my-labels"}).openTooltip();
+    } // end pointToLayer
+  }); // end L.geoJson
+
+pointLayer.addData(data_points);
+mymap.addLayer(pointLayer);
 */
