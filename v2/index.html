@@ -1,0 +1,455 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1, user-scalable=no">
+    <meta name="description" content="geography quiz">
+    <meta name="author" content="">
+
+    <title>around</title>
+    <script src="assets/d3.v3.min.js" charset="utf-8"></script>
+
+    <!--
+    <script src="http://d3js.org/topojson.v1.min.js" charset="utf-8"></script>
+    <script src="https://use.fontawesome.com/e7df28fab5.js"></script>
+
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    -->
+    <script src="assets/font-awes-e7df28fab5.js"></script>
+
+<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+  <script src="assets/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery.min.js"><\/script>')</script>
+
+  <script src="assets/tether.min.js"></script>
+  <script src="assets/typeahead.bundle.js"></script>
+
+  <link rel="stylesheet" href="assets/bootstrap.min.css" crossorigin="anonymous">
+  <script src="assets/bootstrap.min.js" crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="assets/leaflet.css" />
+  <link rel="stylesheet" href="assets/spectrum.css" />
+
+  <style>
+  /* Sets the map to be full screen with no margin */
+    body, html, #fullMap {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      font-family: Montserrat, Consolas,"Liberation Mono",Menlo,monospace;
+      font-weight: 100;
+      font-size: 16px;
+      color: #444;
+      overflow: hidden;
+      height: 100%;
+      max-height: 100%;
+    }
+
+    #wrapper {
+      position: fixed;
+      top: 5px;
+      width: 100%;
+      //height: 100%;
+      z-index: 400;
+    }
+
+    #ui {
+      //position: fixed;
+      top: 5px;
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+      vertical-align: middle;
+    }
+    #ui span {
+      vertical-align: middle;
+
+    }
+
+    #opts, #opts-wrapper, .fixed {
+      position: fixed;
+      z-index: 500;
+      line-height: 1;
+      vertical-align: middle;
+    }
+    #opts { bottom: 35px; }
+
+    .top { top: 5px; }
+    .bottom { bottom: 5px; }
+    .left { left: 5px; }
+    .right { right: 5px; }
+
+    label, input {
+      vertical-align: middle;
+      margin: 0;
+    }
+
+    .tt-menu {
+      background: white;
+      padding: 5px;
+    }
+    .tt-menu {
+      background: rgba(240,240,240,0.8);
+    }
+
+
+/* spectrum / colorpicker */
+a.button-b {
+    background-color: transparent;
+    text-align:center;
+    /*color:rgba(0,127,255,0.5);*/
+    color:rgba(20,20,30,0.5);
+    display:inline-block;
+    height:21px;
+    margin:0px;
+    padding:0px 5px;
+    position:relative;
+    /*border: 2px solid rgba(0,127,255,0.5);*/
+    border: 2px solid rgba(20,20,30,0.5);
+    cursor:pointer;
+    border-radius:3px;
+    text-decoration: none;
+    opacity: 1;
+    /*box-sizing: border-box;*/
+    line-height:20px;
+    font-size:12px;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+a.button-b:hover {
+    /*border-color*/
+    opacity: 1;
+    /*color: rgba(0,127,255,1);
+    border-color: rgba(0,127,255,1);*/
+    color: rgba(20,20,30,1);
+    border-color: rgba(20,20,30,1);
+}
+
+
+a.button-c {
+    /*background-color: purple;*/
+    text-align:center;
+    display:inline-block;
+    height:11px;
+    width:11px;
+    margin:0px;
+    padding:5px;
+    position:relative;
+    border: 2px solid rgba(200,200,200,0.5);
+    /*border-width: 2px;*/
+    cursor:pointer;
+    border-radius:50%;
+    text-decoration: none;
+    opacity: 1;
+    /*box-sizing: border-box;*/
+        line-height:21px;
+    font-size:12px;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+
+.middle-aligner {
+    display: inline-block;
+    vertical-align: middle;
+
+}
+.leaflet-popup-content {
+    text-align: center;
+}
+
+.sidepanel {
+    background-color: #fefefd;  /*or #def? ;  overrides lightheme*/
+}
+
+a.no-decoration,
+a.no-decoration:visited,
+a.no-decoration:hover {
+    text-decoration: none!important;
+    color: #000!important;
+}
+
+.sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
+    font: inherit;
+}
+
+.sp-container {
+    border: 1px solid #ddd !important;
+}
+
+a.sp-choose,
+a.sp-cancel {
+    background-color: transparent;
+    text-align: center;
+    /* color: rgba(0,127,255,0.5); */
+    color: rgba(20,20,30,0.8);
+    display: inline-block;
+    height: 21px;
+    margin: 0px;
+    margin-left: 4px;
+    padding: 0px 5px !important;
+    position: relative;
+    /* border: 2px solid rgba(0,127,255,0.5); */
+    border: 1px solid rgba(20,20,30,0.5);
+    cursor: pointer;
+    border-radius: 0px;
+    text-decoration: none !important;
+    opacity: 1;
+    /* box-sizing: border-box; */
+    line-height: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    vertical-align: middle;
+    font: inherit !important;
+}
+
+a.sp-choose:hover,
+a.sp-cancel:hover {
+    /*border-color*/
+    opacity: 1;
+    /*color: rgba(0,127,255,1);
+    border-color: rgba(0,127,255,1);*/
+    color: rgba(20,20,30,1);
+    border-color: rgba(20,20,30,1);
+}
+
+a.sp-cancel {
+    float: left;
+    margin-left: 0px;
+}
+
+a.sp-choose {
+    float: right;
+}
+
+.sp-input {
+    width: 100%;
+}
+.sp-input {
+    font-size: 0.8em !important;
+    font-family: monospace !important;
+    border: 1px solid rgba(20,20,30,0.5);
+    padding: 0px 5px !important;
+    margin: 0;
+    width: 80px;
+    background: transparent;
+    border-radius: 0px;
+    color: rgba(20,20,30,0.8);
+    height: 23px;
+    float: right;
+}
+
+.swatch {
+  min-width: 18px;
+  min-height: 18px;
+  border: 1px solid gray;
+}
+
+#toast {
+  font-size: 30px;
+  font-family: Times, serif;
+  margin: 9px;
+}
+.correct { color: green; }
+.incorrect { color: rgb(127,30,20); }
+
+
+/*bootstrap override */
+select:focus,
+input[type="text"]:focus,
+input:focus {
+  border-color: #FF0000;
+  //box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
+  box-shadow: none;
+  border-color: rgba(174, 174, 174, 0.8);
+  //box-shadow: 0 1px 1px rgba(174, 174, 174, 0.075) inset, 0 0 8px rgba(174, 174, 174, 0.6);
+  outline: 0 none;
+  //border-width: 1px;
+}
+
+  .btn-lg-jk {
+    display: inline-block;
+    font-size: 30px;
+    color: #999;
+  }
+  .btn-md-jk {
+    display: inline-block;
+    font-size: 20px;
+    color: #999;
+  }
+  .btn-sm-jk {
+    display: inline-block;
+    font-size: 10px;
+    color: #999;
+  }
+  #knowledge {
+    font-family: Helvetica, sans-serif;
+    font-size: 11px;
+    position: absolute;
+    margin-left: 36px;
+    margin-right: 40px;
+    /*width: 90%;*/
+    padding: 3px;
+    bottom: 1px;
+    background: rgba(255,255,255,0.6);
+    z-index: 900;
+  }
+  #knowledge-btn {
+    left: 8px;
+    bottom: 32px;
+    position: absolute;
+  }
+
+  #capital {
+    //font-family: Helvetica, sans-serif;
+    font-size: 11px;
+    position: absolute;
+    margin-right: 26px;
+    //margin-right: 40px;
+    /*width: 90%;*/
+    padding: 3px;
+    top: 50px;
+    //bottom: 1px;
+    background: rgba(255,255,255,0.6);
+    z-index: 900;
+  }
+  #star-btn {
+    //left: 8px;
+    top: 44px;
+    position: absolute;
+  }
+
+    /* remove label background elements */
+    .leaflet-tooltip.city-labels {
+        background-color: transparent;
+        //border: transparent;
+        box-shadow: none;
+        font-weight: bold;
+        font-size: 12px;
+        width: 120px;
+        height: 23px;
+        border: 1px solid #777;
+    }
+
+    .div-icon {
+        // border: 1px solid green;
+        font-family: "Avenir Next Condensed", "Arial Narrow";
+        font-size: 10px;
+        color: #333;
+        line-height: 10px;
+        text-align: center;
+    }
+
+    .display-block { display: block; }
+    .display-none { display: none; }
+
+
+  </style>
+
+  </head>
+  <body>
+
+    <div id="fullMap" class="">
+    </div>
+
+    <div id="wrapper" class="">
+
+
+      <div id="ui">
+        <span id="current-number"></span>
+        <input autofocus="autofocus" type="text" id="response" class="typeahead" autocomplete="off" autocorrect="off">
+        <span id="toast">
+
+        </span>
+        <span>
+          <span id="count-correct">0</span>/<span id="count-all">0</span>
+           (<span id="count-percent">0%</span>)
+        </span>
+        <span id="enter" class="btn"></span>
+      </div>
+
+    </div>
+
+    <div class="fixed top right">
+      <a data-toggle="collapse" data-target="#capital" href="#capital" class="btn-md-jk right" id="star-btn">
+        <i class="fa fa-star-o" aria-hidden="true"></i>
+      </a>
+    </div>
+
+    <div id="capital" class="top right collapse">Capital</div>
+    <div id="knowledge" class="collapse">Wiki</div>
+
+    <div id="opts-wrapper"  class="bottom left">
+        <a data-toggle="collapse" data-target="#knowledge" href="#knowledge" class="btn-md-jk" id="knowledge-btn">
+          <i class="fa fa-lightbulb-o" aria-hidden="true"></i>
+        </a>
+
+      <div>
+      </div>
+
+      <div class="btn-lg-jk">
+        <a data-toggle="collapse" data-target="#opts" href="#opts" class="btn-lg-jk">
+          <i class="fa fa-cog" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <div id="opts" class="collapse">
+
+        <!--
+        <label><input type="radio" name="opts" value="pop" checked="checked"> Population</label>
+        <br />
+        <label><input type="radio" name="opts" value="area"> Area</label>
+        <br />
+        <label><input type="radio" name="opts" value="random" > Random</label>
+        <br /> -->
+
+        <select id="data-select">
+          <optgroup>
+            <option value="world">World</option>
+            <option value="calif">California</option>
+            <option value="wild">wilderness</option>
+            <option value="sf">SF</option>
+          </optgroup>
+        </select>
+        <br />
+
+        <select id="sort-select" name="opts">
+          <optgroup>
+            <option value="pop">Population</option>
+            <option value="area">Area</option>
+            <option value="random">Random</option>
+          </optgroup>
+        </select>
+        <br />
+
+        <label><input type="checkbox" name="advanced" value="ADVANCED"> Advanced</label>
+        <label><input type="checkbox" name="study" value="STUDY"> Study</label>
+        <br />
+
+      </div>
+    </div>
+
+
+    <!--
+    <script src="assets/leaflet-1.2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.1.0/leaflet.js"></script>
+    <script src="assets/leaflet/leaflet-src.js"></script>
+    -->
+    <script src="assets/leaflet-1.0.js"></script>
+    <script src="assets/leaflet-hash.js" charset="utf-8"></script>
+    <!--
+    <script src="assets/Leaflet.Sleep.js" charset="utf-8"></script>
+    -->
+    <script src="assets/spectrum.js" charset="utf-8"></script>
+    <script src="assets/spectrum_helper.js" charset="utf-8"></script>
+    <script src="index.js?2016071815" charset="utf-8"></script>
+
+  </body>
+</html>
+
