@@ -28,7 +28,7 @@ var boundsOpts = {
   maxZoom: 20
 };
 
-A.studyMode = true;
+A.studyMode = false;
 
 A.basemaps = [
   {
@@ -190,9 +190,9 @@ d3.selectAll('input[name=study]')
     var checkit = document.querySelector('input[name=study]:checked');
     console.log("checkit", checkit);
     if (checkit) {
-        d3.selectAll('.leaflet-marker-icon').classed('display-none', true);
-    } else {
         d3.selectAll('.leaflet-marker-icon').classed('display-none', false);
+    } else {
+        d3.selectAll('.leaflet-marker-icon').classed('display-none', true);
     }
 });
 
@@ -318,10 +318,10 @@ function resetData() {
     A.gjLayer.eachLayer(function (layer) {
       // setPopups(layer);
       // layer.unbindPopup();
-      if (A.studyMode == true) {
+      // if (A.studyMode == true) {
         var myIcon = L.divIcon({
             iconSize: new L.Point(25, 25),
-            className: 'div-icon',
+            className: 'div-icon display-none',
             html: layer.feature.properties.name,
             popupAnchor: [0, 30]
         });
@@ -329,7 +329,7 @@ function resetData() {
         layer.studyLabel = L.marker(polygonCenter, {
             icon: myIcon
         }).addTo(A.map);
-      }
+      // }
 
       if(layer.feature.properties.name === A.currAttr) {
         A.map.fitBounds(layer.getBounds(), boundsOpts);
